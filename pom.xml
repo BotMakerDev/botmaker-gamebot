@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.botmaker.gamebot</groupId>
+    <artifactId>gamebot</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.release>25</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!--
+        JitPack is where every BotMaker artifact below resolves from. Central and Google are
+        what everything else comes from; Google is there for the Android tooling an emulator
+        target reaches.
+    -->
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>google</id>
+            <url>https://dl.google.com/dl/android/maven2/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!--
+            The BotMaker SDK: what this bot's code calls, and — the same jar wearing its other
+            hat — the plugin BotMaker Studio loads to draw the palette, the pictures and the
+            capture tools. Change this version to move the bot to another SDK; nothing else
+            here has to move with it.
+        -->
+        <dependency>
+            <groupId>com.github.LiQiyeDev</groupId>
+            <artifactId>botmaker-sdk</artifactId>
+            <version>1.1.6</version>
+        </dependency>
+
+        <!-- Native window enumeration and input, which the SDK's capture and click paths use. -->
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.13.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna-platform</artifactId>
+            <version>5.13.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+
+        <!--
+            The SDK plugin's own needs, at `provided` scope.
+
+            `provided` says exactly what is true: these are on the classpath while the editor
+            draws the SDK's screens, and your bot links none of them at run time. They are here
+            because whoever puts a plugin on a classpath supplies what that plugin needs, and
+            this pom is what names the plugin. Remove them and the SDK still compiles your bot —
+            it just stops loading in Studio, silently, leaving an empty palette.
+        -->
+        <dependency>
+            <groupId>com.github.LiQiyeDev</groupId>
+            <artifactId>botmaker-plugin-toolkit</artifactId>
+            <version>0.0.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>21</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>21</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- The Remote Pilot's HTTP + WebSocket server, and its pairing QR code. -->
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin</artifactId>
+            <version>6.7.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.5.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- The one entry that is not about BotMaker: what a Maven project comes with. -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.3</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

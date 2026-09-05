@@ -1,0 +1,10 @@
+{
+  "templates" : {
+    "collect" : { "tags" : [ "Collect" ] },
+    "battle" : { "tags" : [ "Battle" ] },
+    "victory" : { "tags" : [ "Battle" ] },
+    "defeat" : { "tags" : [ "Battle" ] },
+    "home" : { "tags" : [ "Shared" ] }
+  },
+  "customTags" : [ "Shared" ]
+}

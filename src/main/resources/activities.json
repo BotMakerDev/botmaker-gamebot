@@ -1,0 +1,60 @@
+{
+  "schemaVersion" : 2,
+  "activities" : [ {
+    "name" : "Collect",
+    "enabled" : true,
+    "description" : "Click the collect button while there is one.",
+    "outcomes" : [ "NOTHING_LEFT" ],
+    "goHome" : false,
+    "popupCheck" : true
+  }, {
+    "name" : "Battle",
+    "enabled" : true,
+    "description" : "Start a fight and wait for it to end.",
+    "outcomes" : [ "WON", "LOST" ],
+    "goHome" : true,
+    "popupCheck" : true
+  }, {
+    "name" : "Rest",
+    "enabled" : true,
+    "description" : "Wait for restBetween, then go round again.",
+    "outcomes" : [ ],
+    "goHome" : false,
+    "popupCheck" : false
+  } ],
+  "variables" : [ {
+    "name" : "restBetween",
+    "type" : { "type" : "DURATION", "shape" : "ONE", "list" : false, "void" : false },
+    "value" : [ "1m" ],
+    "description" : "How long Rest waits before the loop starts again.",
+    "tag" : "", "visibility" : "public", "options" : [ ],
+    "bounds" : { "min" : null, "max" : null }
+  }, {
+    "name" : "maxAttempts",
+    "type" : { "type" : "WHOLE_NUMBER", "shape" : "ONE", "list" : false, "void" : false },
+    "value" : [ "20" ],
+    "description" : "How many times an activity polls for a picture before it gives up.",
+    "tag" : "", "visibility" : "public", "options" : [ ],
+    "bounds" : { "min" : 1, "max" : null }
+  } ],
+  "flow" : {
+    "nodes" : [
+      { "activity" : "Collect", "x" : 80.0,  "y" : 80.0 },
+      { "activity" : "Battle",  "x" : 340.0, "y" : 80.0 },
+      { "activity" : "Rest",    "x" : 340.0, "y" : 260.0 }
+    ],
+    "edges" : [
+      { "from" : "Collect", "to" : "Collect", "outcome" : "" },
+      { "from" : "Collect", "to" : "Battle",  "outcome" : "NOTHING_LEFT" },
+      { "from" : "Battle",  "to" : "Collect", "outcome" : "WON" },
+      { "from" : "Battle",  "to" : "Rest",    "outcome" : "LOST" },
+      { "from" : "Rest",    "to" : "Collect", "outcome" : "" }
+    ],
+    "start" : "Collect",
+    "maxSteps" : 1000,
+    "stepDelayMs" : 1000,
+    "empty" : false
+  },
+  "presets" : [ ],
+  "goHomeByDefault" : false
+}

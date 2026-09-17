@@ -1,17 +1,15 @@
 package com.botmaker.gamebot;
 
 import com.botmaker.sdk.api.bot.Activities;
-import com.botmaker.sdk.api.config.Wire;
 import com.botmaker.sdk.api.interaction.Wait;
 
-import java.time.Duration;
-
 /**
- * Does nothing, for as long as the project says.
+ * Does nothing, for as long as {@link Parameters#restBetween} says.
  *
  * <p>Worth having as an activity rather than a {@code sleep} in the middle of another one: it is a node on
- * the canvas, so it can be re-routed, skipped, or switched off in <b>Project ▸ Set Activity Values</b>
- * without touching code. How long it waits is a project variable for the same reason.
+ * the canvas, so it can be re-routed or switched off without touching code. How long it waits is a
+ * parameter for the same reason — and reading it is one field access, with no name to misspell and no
+ * fallback to write, because the declaration is right there in {@link Parameters}.
  */
 final class Rest {
 
@@ -19,10 +17,7 @@ final class Rest {
 
     static void define() {
         Activities.define("Rest", ctx -> {
-            Duration length = Wire.declares("restBetween")
-                    ? Wire.duration("restBetween")
-                    : Duration.ofMinutes(1);
-            Wait.time(length);
+            Wait.time(Parameters.restBetween);
             return ctx.done();
         });
     }

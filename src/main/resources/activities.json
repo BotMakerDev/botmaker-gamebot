@@ -17,26 +17,12 @@
   }, {
     "name" : "Rest",
     "enabled" : true,
-    "description" : "Wait for restBetween, then go round again.",
+    "description" : "Wait for Parameters.restBetween, then go round again.",
     "outcomes" : [ ],
     "goHome" : false,
     "popupCheck" : false
   } ],
-  "variables" : [ {
-    "name" : "restBetween",
-    "type" : { "type" : "DURATION", "shape" : "ONE", "list" : false, "void" : false },
-    "value" : [ "1m" ],
-    "description" : "How long Rest waits before the loop starts again.",
-    "tag" : "", "visibility" : "public", "options" : [ ],
-    "bounds" : { "min" : null, "max" : null }
-  }, {
-    "name" : "maxAttempts",
-    "type" : { "type" : "WHOLE_NUMBER", "shape" : "ONE", "list" : false, "void" : false },
-    "value" : [ "20" ],
-    "description" : "How many times an activity polls for a picture before it gives up.",
-    "tag" : "", "visibility" : "public", "options" : [ ],
-    "bounds" : { "min" : 1, "max" : null }
-  } ],
+  "variables" : [ ],
   "flow" : {
     "nodes" : [
       { "activity" : "Collect", "x" : 80.0,  "y" : 80.0 },

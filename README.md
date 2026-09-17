@@ -16,8 +16,8 @@ deliberate: a template cannot ship pictures of *your* game, and a bot that refus
 them teaches nothing.
 
 Replace them with ✂ **Capture Templates** in Studio, **keeping the file names**, and the code starts working
-without an edit. `Wire.image("collect")` names a file, not a compiled constant, so adding, renaming and
-recapturing pictures is never a source change.
+without an edit. `Pictures.COLLECT` names a file, not baked-in pixels, so recapturing a picture is never a
+source change.
 
 | Picture | What to capture |
 |---|---|
@@ -27,9 +27,12 @@ recapturing pictures is never a source change.
 | `defeat.png` | Something that is on screen only after a loss. |
 | `home.png` | The close/back button that gets you back to the main screen. |
 
-## The three pieces
+## The four pieces
 
 - **The activities** — `Collect`, `Battle`, `Rest`, one file each. This is the half you write.
+- **The parameters** — `Parameters.java`, one `@Param` field each. That file *is* what
+  **Project ▸ Parameters** shows, and the window writes back into it.
+- **The pictures** — `Pictures.java`, one field per file under `src/main/resources/images`.
 - **The flow** — `src/main/resources/activities.json`, drawn on the Activity Flow canvas in Studio. It says
   which activity starts and where each outcome leads: `Collect` loops on itself until there is nothing left,
   then `Battle`; a win goes back to collecting, a loss rests first.
@@ -45,10 +48,15 @@ exactly as one switched off — so you can delete any of the three and still hav
 Nothing in the code names a capture source, so every match reads the desktop. Point it at a window, a
 monitor or an emulator instance in **Project ▸ Settings** and the same code follows.
 
-## Two knobs, no rebuild
+## Two knobs, in your own code
 
-`restBetween` (how long `Rest` waits) and `maxAttempts` (how many times an activity polls for a picture
-before giving up) are project variables, editable in **Project ▸ Parameters**.
+`Parameters.restBetween` (how long `Rest` waits) and `Parameters.maxAttempts` (how many times an activity
+polls for a picture before giving up) are `@Param` fields in `Parameters.java`. **Project ▸ Parameters**
+lists them, and editing one there rewrites that field's initialiser — your formatting and comments stay put.
+
+The bot reads them as ordinary fields: `Wait.time(Parameters.restBetween)`. A misspelled name is a compile
+error rather than a silent fallback, which is the whole reason they are Java and not a settings file. Both
+are marked `visibility = Param.PUBLIC`, so they also appear in the Runner window for whoever runs the bot.
 
 ## Building it yourself
 

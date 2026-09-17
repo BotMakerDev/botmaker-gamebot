@@ -1,7 +1,6 @@
 package com.botmaker.gamebot;
 
 import com.botmaker.sdk.api.bot.Activities;
-import com.botmaker.sdk.api.config.Wire;
 import com.botmaker.sdk.api.interaction.Wait;
 import com.botmaker.sdk.api.vision.ImageClicker;
 import com.botmaker.sdk.api.vision.ImageFinder;
@@ -15,23 +14,19 @@ import com.botmaker.sdk.api.vision.ImageFinder;
  */
 final class Battle {
 
-    private static final String START = "battle";
-    private static final String VICTORY = "victory";
-    private static final String DEFEAT = "defeat";
-
     private Battle() {}
 
     static void define() {
         Activities.define("Battle", ctx -> {
-            if (!ImageClicker.click(Wire.image(START))) {
+            if (!ImageClicker.click(Pictures.BATTLE)) {
                 // No fight available. Treated as a loss so the flow rests and comes back, rather than
                 // needing a third outcome for "could not even start".
                 return ctx.outcome("LOST");
             }
 
             for (int attempt = 0; Gamebot.keepTrying(attempt); attempt++) {
-                if (ImageFinder.find(Wire.image(VICTORY))) return ctx.outcome("WON");
-                if (ImageFinder.find(Wire.image(DEFEAT))) return ctx.outcome("LOST");
+                if (ImageFinder.find(Pictures.VICTORY)) return ctx.outcome("WON");
+                if (ImageFinder.find(Pictures.DEFEAT)) return ctx.outcome("LOST");
                 Wait.seconds(1);
             }
             // Neither picture ever appeared. Something is on screen that this bot does not know about, so

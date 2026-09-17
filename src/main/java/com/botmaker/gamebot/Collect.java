@@ -1,7 +1,6 @@
 package com.botmaker.gamebot;
 
 import com.botmaker.sdk.api.bot.Activities;
-import com.botmaker.sdk.api.config.Wire;
 import com.botmaker.sdk.api.interaction.Wait;
 import com.botmaker.sdk.api.vision.ImageClicker;
 
@@ -16,14 +15,11 @@ import java.time.Duration;
  */
 final class Collect {
 
-    /** The picture this activity looks for: {@code src/main/resources/images/collect.png}. */
-    private static final String BUTTON = "collect";
-
     private Collect() {}
 
     static void define() {
         Activities.define("Collect", ctx -> {
-            if (!ImageClicker.click(Wire.image(BUTTON))) {
+            if (!ImageClicker.click(Pictures.COLLECT)) {
                 // Nothing to collect. Not a failure — the flow sends this on to Battle.
                 return ctx.outcome("NOTHING_LEFT");
             }

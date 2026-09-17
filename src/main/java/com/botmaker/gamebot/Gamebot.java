@@ -1,7 +1,6 @@
 package com.botmaker.gamebot;
 
 import com.botmaker.sdk.api.bot.Bot;
-import com.botmaker.sdk.api.config.Wire;
 import com.botmaker.sdk.api.flow.FlowGraph;
 import com.botmaker.sdk.api.interaction.Wait;
 import com.botmaker.sdk.api.vision.ImageClicker;
@@ -17,14 +16,16 @@ import com.botmaker.sdk.api.vision.ImageClicker;
  *
  * <p>It runs, and it matches nothing — the pictures under {@code src/main/resources/images} are blank
  * placeholders. Replace them with ✂ <b>Capture Templates</b> in BotMaker Studio, keeping the file names,
- * and the same code starts working against your game. Nothing here has to be edited to do that:
- * {@link Wire#image} names a file, not a compiled constant.
+ * and the same code starts working against your game. Nothing here has to be edited to do that: an
+ * {@link Pictures} entry names a file, not a compiled constant.
  *
- * <h2>The three pieces, and which one to edit</h2>
+ * <h2>The four pieces, and which one to edit</h2>
  *
  * <ul>
  *   <li><b>The activities</b> — {@link Collect}, {@link Battle}, {@link Rest}. One file each, holding the
  *       work. This is the half you write.</li>
+ *   <li><b>The parameters</b> — {@link Parameters}, one {@code @Param} field each. They are what
+ *       <b>Project ▸ Parameters</b> shows and writes, and what the bot reads by name.</li>
  *   <li><b>The flow</b> — {@code activities.json}, drawn on the Activity Flow canvas. It says which
  *       activity starts and where each outcome leads. Open it in Studio rather than editing the file.</li>
  *   <li><b>This class</b> — the wiring between the two. Each activity's {@code define()} attaches a body to
@@ -66,7 +67,7 @@ public final class Gamebot {
      */
     static void goHome() {
         for (int attempt = 0; attempt < 5; attempt++) {
-            if (!ImageClicker.click(Wire.image("home"))) return;
+            if (!ImageClicker.click(Pictures.HOME)) return;
             Wait.milliseconds(400);
         }
     }
@@ -76,11 +77,13 @@ public final class Gamebot {
      *
      * <p>Every loop inside an activity needs a way out that is not "the game changed" — a bot that cannot
      * find its picture has to give up rather than spin. This is the shared answer: a bounded number of
-     * attempts, read from the project's own {@code maxAttempts} variable so it can be changed in
-     * <b>Project ▸ Parameters</b> without a rebuild. {@code declares} is what keeps this working in a
-     * project where somebody deleted that variable.
+     * attempts, read from {@link Parameters#maxAttempts}, which <b>Project ▸ Parameters</b> edits in place.
+     *
+     * <p>One field access and no fallback. The parameter is a field of this project, so it cannot be
+     * missing at run time — deleting it is a compile error here, which is the point of declaring it in Java
+     * rather than looking it up by name in a file.
      */
     static boolean keepTrying(int attempt) {
-        return attempt < (Wire.declares("maxAttempts") ? Wire.whole("maxAttempts") : 20);
+        return attempt < Parameters.maxAttempts;
     }
 }

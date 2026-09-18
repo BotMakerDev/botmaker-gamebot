@@ -41,15 +41,13 @@
             capture tools. Change this version to move the bot to another SDK; nothing else
             here has to move with it.
 
-            ON THIS BRANCH it is the local snapshot, because the parameters this template now
-            declares with @Param need an SDK whose plugin-basics has that annotation, and no
-            such SDK is released yet. The branch is merged and the real version pinned when it
-            is. Build it with `mvn install` at the botmaker umbrella root first.
+            1.1.9 is the first released SDK whose plugin-basics carries @Param, which is how
+            this template declares its parameters. An earlier SDK does not compile this bot.
         -->
         <dependency>
             <groupId>com.github.LiQiyeDev</groupId>
             <artifactId>botmaker-sdk</artifactId>
-            <version>0.0.0-SNAPSHOT</version>
+            <version>1.1.9</version>
         </dependency>
 
         <!-- Native window enumeration and input, which the SDK's capture and click paths use. -->

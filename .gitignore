@@ -1,3 +1,9 @@
 target/
 .idea/
 *.iml
+
+# Studio's own editor state for the project it has open: which file was last on screen, where the overlay
+# sits, which overload a call favours. A template ships none — it is written when the template is opened in
+# Studio (Open Folder...), and committing one machine's window layout into what every new project copies is
+# the same mistake as committing .idea/.
+src/main/resources/settings.json

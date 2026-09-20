@@ -1,5 +1,7 @@
 package com.botmaker.gamebot;
 
+import com.botmaker.gamebot.plugins.sdk.Pictures;
+import com.botmaker.gamebot.plugins.sdk.Sdk;
 import com.botmaker.sdk.api.bot.Bot;
 import com.botmaker.sdk.api.flow.FlowGraph;
 import com.botmaker.sdk.api.interaction.Wait;
@@ -16,45 +18,47 @@ import com.botmaker.sdk.api.vision.ImageClicker;
  *
  * <p>It runs, and it matches nothing — the pictures under {@code src/main/resources/images} are blank
  * placeholders. Replace them with ✂ <b>Capture Templates</b> in BotMaker Studio, keeping the file names,
- * and the same code starts working against your game. Nothing here has to be edited to do that: an
+ * and the same code starts working against your game. Nothing here has to be edited to do that: a
  * {@link Pictures} entry names a file, not a compiled constant.
  *
  * <h2>The four pieces, and which one to edit</h2>
  *
  * <ul>
  *   <li><b>The activities</b> — {@link Collect}, {@link Battle}, {@link Rest}. One file each, holding the
- *       work. This is the half you write.</li>
+ *       work, each a {@code public static Outcome body(ActivityContext ctx)}. This is the half you
+ *       write.</li>
  *   <li><b>The parameters</b> — {@link Parameters}, one {@code @Param} field each. They are what
  *       <b>Project ▸ Parameters</b> shows and writes, and what the bot reads by name.</li>
- *   <li><b>The flow</b> — {@code activities.json}, drawn on the Activity Flow canvas. It says which
- *       activity starts and where each outcome leads. Open it in Studio rather than editing the file.</li>
- *   <li><b>This class</b> — the wiring between the two. Each activity's {@code define()} attaches a body to
- *       a name on the canvas; {@code Bot.start} runs the flow with a way home.</li>
+ *   <li><b>The flow</b> — {@code plugins/sdk/Sdk.java}, drawn on the Activity Flow canvas. It says which
+ *       activity starts, which method each card runs, and where each outcome leads. Draw it in Studio, or
+ *       edit the expression by hand — it is ordinary Java either way.</li>
+ *   <li><b>This class</b> — the wiring. {@code Sdk.install()} hands the flow and the capture source to the
+ *       SDK; {@code Bot.start} runs the flow with a way home.</li>
  * </ul>
  *
- * <p>The two halves are joined by a <b>string</b>, deliberately: renaming an activity on the canvas does
- * not rename it here, and until you change both they stop matching. An activity with no {@code define}
- * call is not an error — it behaves exactly as one switched off and follows its {@code DISABLED} wire —
- * so deleting any of the three below leaves a bot that still runs.
+ * <p>The two halves are joined by a <b>method reference</b>: {@code Collect::body} in the flow is the same
+ * four tokens javac resolves here, so renaming or deleting an activity's method is a compile error naming
+ * {@code Sdk.java}, not a card that silently stops doing anything. An activity's <em>label</em> on the
+ * canvas is a separate string on purpose — renaming the card does not touch your code, and renaming your
+ * class does not touch the canvas.
  *
  * <h2>Capture</h2>
  *
- * <p>Nothing here names where the pixels come from, so every match reads the desktop. Point it somewhere
- * narrower — a window, a monitor, an emulator instance — in <b>Project ▸ Settings</b>, and the same code
- * follows without a line changing.
+ * <p>Where the pixels come from is {@code Sdk.captureSource()}, which reads the whole desktop out of the
+ * box. Point it somewhere narrower — a window, a monitor, an emulator instance — in <b>Project ▸
+ * Settings</b>, and the same code follows without a line here changing.
  */
 public final class Gamebot {
 
     private Gamebot() {}
 
     public static void main(String[] args) {
-        Collect.define();
-        Battle.define();
-        Rest.define();
+        // Hands this project's flow and capture source to the SDK. Everything it installs is a value
+        // written in plugins/sdk/Sdk.java, so what the bot runs is readable without opening Studio.
+        Sdk.install();
 
-        // The flow is read from activities.json beside this class and walked until it ends or the bot is
-        // stopped. goHome is what it runs to get back to a known screen — between activities, and after
-        // anything unexpected.
+        // The flow is walked until it ends or the bot is stopped. goHome is what it runs to get back to a
+        // known screen — between activities, and after anything unexpected.
         Bot.start(() -> FlowGraph.run(Gamebot.class, Gamebot::goHome), Gamebot::goHome);
     }
 

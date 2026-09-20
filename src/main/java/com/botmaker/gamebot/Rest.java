@@ -1,6 +1,7 @@
 package com.botmaker.gamebot;
 
-import com.botmaker.sdk.api.bot.Activities;
+import com.botmaker.sdk.api.bot.ActivityContext;
+import com.botmaker.sdk.api.bot.Outcome;
 import com.botmaker.sdk.api.interaction.Wait;
 
 /**
@@ -11,14 +12,12 @@ import com.botmaker.sdk.api.interaction.Wait;
  * parameter for the same reason — and reading it is one field access, with no name to misspell and no
  * fallback to write, because the declaration is right there in {@link Parameters}.
  */
-final class Rest {
+public final class Rest {
 
     private Rest() {}
 
-    static void define() {
-        Activities.define("Rest", ctx -> {
-            Wait.time(Parameters.restBetween);
-            return ctx.done();
-        });
+    public static Outcome body(ActivityContext ctx) {
+        Wait.time(Parameters.restBetween);
+        return ctx.done();
     }
 }

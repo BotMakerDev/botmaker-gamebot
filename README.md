@@ -17,7 +17,8 @@ them teaches nothing.
 
 Replace them with ✂ **Capture Templates** in Studio, **keeping the file names**, and the code starts working
 without an edit. `Pictures.COLLECT` names a file, not baked-in pixels, so recapturing a picture is never a
-source change.
+source change. (`Pictures` sits in `plugins/sdk/` — 🖼 **Manage Pictures** owns that class, because adding
+or renaming a picture has to move the file, the constant and every use of it together.)
 
 | Picture | What to capture |
 |---|---|
@@ -32,21 +33,27 @@ source change.
 - **The activities** — `Collect`, `Battle`, `Rest`, one file each. This is the half you write.
 - **The parameters** — `Parameters.java`, one `@Param` field each. That file *is* what
   **Project ▸ Parameters** shows, and the window writes back into it.
-- **The pictures** — `Pictures.java`, one field per file under `src/main/resources/images`.
-- **The flow** — `src/main/resources/activities.json`, drawn on the Activity Flow canvas in Studio. It says
-  which activity starts and where each outcome leads: `Collect` loops on itself until there is nothing left,
-  then `Battle`; a win goes back to collecting, a loss rests first.
-- **`Gamebot`** — the wiring. Each activity's `define()` attaches a body to a name on the canvas, and
+- **The pictures** — `plugins/sdk/Pictures.java`, one constant per file under `src/main/resources/images`.
+- **The flow** — `plugins/sdk/Sdk.java`, drawn on the Activity Flow canvas in Studio. It says which activity
+  starts, which method each card runs and where each outcome leads: `Collect` loops on itself until there is
+  nothing left, then `Battle`; a win goes back to collecting, a loss rests first.
+- **`Gamebot`** — the wiring. `Sdk.install()` hands the flow and the capture source to the SDK, and
   `Bot.start` walks the flow with a way home.
 
-The canvas and the code are joined by a **string**. Renaming an activity in Studio does not rename it here,
-and until you change both they stop matching. An activity with no `define` call is not an error — it behaves
-exactly as one switched off — so you can delete any of the three and still have a bot that runs.
+The canvas and the code are joined by a **method reference**: `Collect::body` in `Sdk.java` is the same four
+tokens javac resolves in `Collect.java`, so renaming or deleting an activity's method is a compile error
+naming the file it broke — never a card that silently stops doing anything. An activity's *label* on the
+canvas is a separate string on purpose, so renaming the card does not touch your code and renaming your class
+does not touch the canvas.
+
+`Sdk.java` and `Pictures.java` were copied into your project when the SDK was added, and they are yours from
+that moment. Studio rewrites the expression a `@Managed` method returns and nothing else, so comments,
+helpers and imports you add around them survive.
 
 ## Where the pixels come from
 
-Nothing in the code names a capture source, so every match reads the desktop. Point it at a window, a
-monitor or an emulator instance in **Project ▸ Settings** and the same code follows.
+`Sdk.captureSource()` reads the whole desktop out of the box. Point it at a window, a monitor or an emulator
+instance in **Project ▸ Settings** and the same code follows — the one expression changes, nothing else.
 
 ## Two knobs, in your own code
 

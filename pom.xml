@@ -41,13 +41,15 @@
             capture tools. Change this version to move the bot to another SDK; nothing else
             here has to move with it.
 
-            1.1.9 is the first released SDK whose plugin-basics carries @Param, which is how
-            this template declares its parameters. An earlier SDK does not compile this bot.
+            1.1.14 is the first released SDK this bot compiles against, and the floor is the
+            whole of what this template is written as: @Param parameters (1.1.9), and the flow
+            as a value in your own `plugins/sdk/Sdk.java` — `Flow`, `Flows`, and `@Managed` from
+            plugin-basics, which the SDK brings (1.1.13). An earlier SDK does not compile it.
         -->
         <dependency>
             <groupId>com.github.LiQiyeDev</groupId>
             <artifactId>botmaker-sdk</artifactId>
-            <version>1.1.9</version>
+            <version>1.1.14</version>
         </dependency>
 
         <!-- Native window enumeration and input, which the SDK's capture and click paths use. -->
@@ -75,11 +77,16 @@
             because whoever puts a plugin on a classpath supplies what that plugin needs, and
             this pom is what names the plugin. Remove them and the SDK still compiles your bot —
             it just stops loading in Studio, silently, leaving an empty palette.
+
+            The toolkit moves with the SDK, not with your bot: 0.1.6 is what SDK 1.1.14 was
+            built against. A toolkit older than the SDK's own is the one way this list goes
+            wrong — the plugin links a widget that is not there, and the palette is empty for a
+            reason nothing on screen explains.
         -->
         <dependency>
             <groupId>com.github.LiQiyeDev</groupId>
             <artifactId>botmaker-plugin-toolkit</artifactId>
-            <version>0.0.5</version>
+            <version>0.1.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

@@ -52,23 +52,6 @@
             <version>1.1.14</version>
         </dependency>
 
-        <!-- Native window enumeration and input, which the SDK's capture and click paths use. -->
-        <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna</artifactId>
-            <version>5.13.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna-platform</artifactId>
-            <version>5.13.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.15.2</version>
-        </dependency>
-
         <!--
             The SDK plugin's own needs, at `provided` scope.
 
@@ -86,6 +69,14 @@
             whole project open with a bare class name (`com/botmaker/plugin/api/ValueContext`)
             and no mention of the version that caused it. Same rule as plugin-basics: never
             declare a plugin's own dependency beside the plugin that brings it.
+
+            The rule is about every coordinate, not only the one that bit. `jna`, `jna-platform`
+            and `jackson-databind` were declared here too until 2026-09-21, at 5.13.0 and 2.15.2
+            against an SDK built on 5.14.0 and 2.17.0 — older, by nearest-wins, for the same
+            reason and with the same silence. They are gone: the SDK declares all three at
+            `compile`, so a bot gets exactly what its own SDK was built against, and moving to
+            another SDK moves them with it. Nothing this file names is something the SDK already
+            brings.
         -->
         <dependency>
             <groupId>org.openjfx</groupId>

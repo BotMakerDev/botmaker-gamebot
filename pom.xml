@@ -78,17 +78,15 @@
             this pom is what names the plugin. Remove them and the SDK still compiles your bot —
             it just stops loading in Studio, silently, leaving an empty palette.
 
-            The toolkit moves with the SDK, not with your bot: 0.1.6 is what SDK 1.1.14 was
-            built against. A toolkit older than the SDK's own is the one way this list goes
-            wrong — the plugin links a widget that is not there, and the palette is empty for a
-            reason nothing on screen explains.
+            `botmaker-plugin-toolkit` is deliberately NOT one of them, since 2026-09-21. The SDK
+            declares it itself, at `compile` and not `optional`, so it arrives here transitively
+            at exactly the version that SDK was built against. Naming it here as well pinned it
+            by Maven's nearest-wins to whatever number this file happened to say — and a toolkit
+            older than the SDK's own is linked against a contract that has moved, which fails the
+            whole project open with a bare class name (`com/botmaker/plugin/api/ValueContext`)
+            and no mention of the version that caused it. Same rule as plugin-basics: never
+            declare a plugin's own dependency beside the plugin that brings it.
         -->
-        <dependency>
-            <groupId>com.github.LiQiyeDev</groupId>
-            <artifactId>botmaker-plugin-toolkit</artifactId>
-            <version>0.1.6</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>

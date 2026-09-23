@@ -3,11 +3,9 @@ package com.botmaker.gamebot.plugins.sdk;
 import com.botmaker.gamebot.Battle;
 import com.botmaker.gamebot.Collect;
 import com.botmaker.gamebot.Rest;
-import com.botmaker.plugin.basics.managed.Managed;
+import com.botmaker.plugin.api.managed.Managed;
 import com.botmaker.sdk.api.capture.CaptureSource;
-import com.botmaker.sdk.api.capture.Source;
 import com.botmaker.sdk.api.flow.Flow;
-import com.botmaker.sdk.api.flow.Flows;
 
 import java.util.List;
 
@@ -18,16 +16,11 @@ import java.util.List;
  * regenerates it. BotMaker rewrites the expression a {@code @Managed} method returns and nothing else, so
  * comments, helper methods, imports you add and anything else you write around them survive untouched.
  *
- * <p>Delete it if you do not want it. A bot that never calls {@link #install()} runs with no flow and the
- * default capture source, which is what every bot did before this file existed.
+ * <p>Your {@code main} names this class — {@code Bot.run(Gamebot::goHome, Sdk.class)} — and the SDK reads
+ * each {@code @Managed} method off it. Leave it out of that call and the bot runs with no flow and the
+ * default capture source.
  */
 public final class Sdk {
-
-    /** Hands this bot's SDK values to the SDK. Call it once, from your {@code main}, before the bot starts. */
-    public static void install() {
-        Flows.use(flow());
-        Source.set(captureSource());
-    }
 
     /**
      * The activity flow: what runs, in what order, and what stops it.
@@ -60,7 +53,7 @@ public final class Sdk {
     /**
      * Where pixels are read from.
      *
-     * <p>Chosen in <i>Project ▸ Settings</i>. {@code CaptureSource.desktop()} is the whole screen;
+     * <p>Chosen with <i>🎯 Capture Source</i> on the toolbar. {@code CaptureSource.desktop()} is the whole screen;
      * {@code CaptureSource.window("Game")} follows one window, wherever it moves.
      */
     @Managed("capture")

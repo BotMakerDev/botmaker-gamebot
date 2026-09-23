@@ -1,6 +1,6 @@
 package com.botmaker.gamebot.plugins.sdk;
 
-import com.botmaker.plugin.basics.managed.Managed;
+import com.botmaker.plugin.api.managed.Managed;
 import com.botmaker.sdk.api.vision.ImageTemplate;
 
 /**

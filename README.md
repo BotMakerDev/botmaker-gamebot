@@ -37,8 +37,8 @@ or renaming a picture has to move the file, the constant and every use of it tog
 - **The flow** — `plugins/sdk/Sdk.java`, drawn on the Activity Flow canvas in Studio. It says which activity
   starts, which method each card runs and where each outcome leads: `Collect` loops on itself until there is
   nothing left, then `Battle`; a win goes back to collecting, a loss rests first.
-- **`Gamebot`** — the wiring. `Sdk.install()` hands the flow and the capture source to the SDK, and
-  `Bot.start` walks the flow with a way home.
+- **`Gamebot`** — the wiring. `Bot.run(Gamebot::goHome, Sdk.class)` reads the flow and the capture source
+  off `Sdk.java` and walks the flow with a way home.
 
 The canvas and the code are joined by a **method reference**: `Collect::body` in `Sdk.java` is the same four
 tokens javac resolves in `Collect.java`, so renaming or deleting an activity's method is a compile error
@@ -53,7 +53,7 @@ helpers and imports you add around them survive.
 ## Where the pixels come from
 
 `Sdk.captureSource()` reads the whole desktop out of the box. Point it at a window, a monitor or an emulator
-instance in **Project ▸ Settings** and the same code follows — the one expression changes, nothing else.
+instance with **🎯 Capture Source** on the toolbar and the same code follows — the one expression changes, nothing else.
 
 ## Two knobs, in your own code
 

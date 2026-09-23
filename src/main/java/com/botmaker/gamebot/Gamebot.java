@@ -3,7 +3,6 @@ package com.botmaker.gamebot;
 import com.botmaker.gamebot.plugins.sdk.Pictures;
 import com.botmaker.gamebot.plugins.sdk.Sdk;
 import com.botmaker.sdk.api.bot.Bot;
-import com.botmaker.sdk.api.flow.FlowGraph;
 import com.botmaker.sdk.api.interaction.Wait;
 import com.botmaker.sdk.api.vision.ImageClicker;
 
@@ -32,8 +31,8 @@ import com.botmaker.sdk.api.vision.ImageClicker;
  *   <li><b>The flow</b> — {@code plugins/sdk/Sdk.java}, drawn on the Activity Flow canvas. It says which
  *       activity starts, which method each card runs, and where each outcome leads. Draw it in Studio, or
  *       edit the expression by hand — it is ordinary Java either way.</li>
- *   <li><b>This class</b> — the wiring. {@code Sdk.install()} hands the flow and the capture source to the
- *       SDK; {@code Bot.start} runs the flow with a way home.</li>
+ *   <li><b>This class</b> — the wiring. {@code Bot.run} reads the flow and the capture source off
+ *       {@code Sdk.class} and walks the flow with a way home.</li>
  * </ul>
  *
  * <p>The two halves are joined by a <b>method reference</b>: {@code Collect::body} in the flow is the same
@@ -45,21 +44,18 @@ import com.botmaker.sdk.api.vision.ImageClicker;
  * <h2>Capture</h2>
  *
  * <p>Where the pixels come from is {@code Sdk.captureSource()}, which reads the whole desktop out of the
- * box. Point it somewhere narrower — a window, a monitor, an emulator instance — in <b>Project ▸
- * Settings</b>, and the same code follows without a line here changing.
+ * box. Point it somewhere narrower — a window, a monitor, an emulator instance — with <b>🎯 Capture
+ * Source</b> on the toolbar, and the same code follows without a line here changing.
  */
 public final class Gamebot {
 
     private Gamebot() {}
 
     public static void main(String[] args) {
-        // Hands this project's flow and capture source to the SDK. Everything it installs is a value
-        // written in plugins/sdk/Sdk.java, so what the bot runs is readable without opening Studio.
-        Sdk.install();
-
-        // The flow is walked until it ends or the bot is stopped. goHome is what it runs to get back to a
-        // known screen — between activities, and after anything unexpected.
-        Bot.start(() -> FlowGraph.run(Gamebot.class, Gamebot::goHome), Gamebot::goHome);
+        // Installs the flow and the capture source written in plugins/sdk/Sdk.java, so what the bot runs is
+        // readable without opening Studio, then walks the flow until it ends or the bot is stopped. goHome is
+        // what it runs to get back to a known screen — between activities, and after anything unexpected.
+        Bot.run(Gamebot::goHome, Sdk.class);
     }
 
     /**

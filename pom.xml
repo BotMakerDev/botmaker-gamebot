@@ -12,6 +12,13 @@
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--
+            The SDK this bot is built on. A property rather than a literal so that the BotMaker
+            repository can build this template against the SDK it is developing
+            (`mvn -Ptemplates -Dbotmaker.sdk.version=0.0.0-SNAPSHOT`); a release moves this value.
+            Studio's Project ▸ Upgrade… moves it too, and keeps the property.
+        -->
+        <botmaker.sdk.version>1.1.14</botmaker.sdk.version>
     </properties>
 
     <!--
@@ -38,18 +45,17 @@
         <!--
             The BotMaker SDK: what this bot's code calls, and — the same jar wearing its other
             hat — the plugin BotMaker Studio loads to draw the palette, the pictures and the
-            capture tools. Change this version to move the bot to another SDK; nothing else
-            here has to move with it.
+            capture tools. Change `botmaker.sdk.version` above to move the bot to another SDK;
+            nothing else here has to move with it.
 
-            1.1.14 is the first released SDK this bot compiles against, and the floor is the
-            whole of what this template is written as: @Param parameters (1.1.9), and the flow
-            as a value in your own `plugins/sdk/Sdk.java` — `Flow`, `Flows`, and `@Managed` from
-            plugin-basics, which the SDK brings (1.1.13). An earlier SDK does not compile it.
+            This source is written for SDK 2.0.0: `Bot.run(Gamebot::goHome, Sdk.class)`, and
+            `@Param`/`@Managed` from the plugin contract, which the SDK brings. An earlier SDK does
+            not compile it.
         -->
         <dependency>
             <groupId>com.github.LiQiyeDev</groupId>
             <artifactId>botmaker-sdk</artifactId>
-            <version>1.1.14</version>
+            <version>${botmaker.sdk.version}</version>
         </dependency>
 
         <!--

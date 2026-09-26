@@ -5,7 +5,9 @@ target/
 # Studio's own editor state for the project it has open: which file was last on screen, where the overlay
 # sits, which overload a call favours. A template ships none — it is written when the template is opened in
 # Studio (Open Folder...), and committing one machine's window layout into what every new project copies is
-# the same mistake as committing .idea/.
+# the same mistake as committing .idea/. It lives in .botmaker/ since Studio's 2026-09-26 build; the second
+# line is where an older Studio still writes it.
+/.botmaker/
 src/main/resources/settings.json
 
 # The flow editor's card positions. The flow itself is Java, in src/main/java/<pkg>/plugins/sdk/Sdk.java,

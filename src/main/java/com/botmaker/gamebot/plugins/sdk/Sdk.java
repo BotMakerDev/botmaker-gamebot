@@ -4,6 +4,7 @@ import com.botmaker.gamebot.Battle;
 import com.botmaker.gamebot.Collect;
 import com.botmaker.gamebot.Rest;
 import com.botmaker.plugin.api.managed.Managed;
+import com.botmaker.sdk.api.bot.BotSettings;
 import com.botmaker.sdk.api.capture.CaptureSource;
 import com.botmaker.sdk.api.flow.Flow;
 
@@ -17,8 +18,8 @@ import java.util.List;
  * comments, helper methods, imports you add and anything else you write around them survive untouched.
  *
  * <p>Your {@code main} names this class — {@code Bot.run(Gamebot::goHome, Sdk.class)} — and the SDK reads
- * each {@code @Managed} method off it. Leave it out of that call and the bot runs with no flow and the
- * default capture source.
+ * each {@code @Managed} method off it. Leave it out of that call and the bot runs with no flow, the default
+ * capture source and the default settings.
  */
 public final class Sdk {
 
@@ -59,6 +60,23 @@ public final class Sdk {
     @Managed("capture")
     public static CaptureSource captureSource() {
         return CaptureSource.desktop();
+    }
+
+    /**
+     * How the bot clicks and looks: the pauses around a match, how sure a match has to be, whether it drives the
+     * real mouse and keyboard, and whether it runs on a private display of its own.
+     *
+     * <p>Changed in <i>⚙ Bot Settings</i>, and applied before the first click wherever the bot runs. What it
+     * <em>launches</em> is not here: that is a fact about each computer, which Studio passes to the run.
+     */
+    @Managed("settings")
+    public static BotSettings settings() {
+        return BotSettings.of(
+                BotSettings.clicks(500, 200, true),
+                BotSettings.vision(0.8, 0.05),
+                BotSettings.input(false, BotSettings.InputBackend.AUTO),
+                BotSettings.session(true, BotSettings.DisplayBackend.AUTO),
+                20, true);
     }
 
     private Sdk() {}

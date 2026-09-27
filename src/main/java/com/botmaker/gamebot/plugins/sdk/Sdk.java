@@ -7,8 +7,10 @@ import com.botmaker.plugin.api.managed.Managed;
 import com.botmaker.sdk.api.bot.BotSettings;
 import com.botmaker.sdk.api.capture.CaptureSource;
 import com.botmaker.sdk.api.flow.Flow;
+import com.botmaker.sdk.api.flow.FlowLayout;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The BotMaker SDK's values for this bot.
@@ -49,6 +51,20 @@ public final class Sdk {
                 List.of(),
                 "Collect",
                 Flow.limits(1000, 1000));
+    }
+
+    /**
+     * Where each card sits in <i>Project ▸ Activity Flow</i>, keyed by activity name.
+     *
+     * <p>Nothing at runtime reads it: it is here so a copy of this bot opens on the same canvas. Dragging a
+     * card rewrites it, and renaming a card rewrites it together with {@link #flow()}.
+     */
+    @Managed("flow.layout")
+    public static FlowLayout flowLayout() {
+        return FlowLayout.of(Map.ofEntries(
+                Map.entry("Collect", FlowLayout.at(80, 80)),
+                Map.entry("Battle", FlowLayout.at(380, 80)),
+                Map.entry("Rest", FlowLayout.at(380, 300))), true);
     }
 
     /**

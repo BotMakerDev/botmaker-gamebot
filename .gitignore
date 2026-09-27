@@ -9,8 +9,3 @@ target/
 # line is where an older Studio still writes it.
 /.botmaker/
 src/main/resources/settings.json
-
-# The flow editor's card positions. The flow itself is Java, in src/main/java/<pkg>/plugins/sdk/Sdk.java,
-# and is committed; where each card sits on the canvas is not the bot changing, so dragging a node must not
-# turn up in a diff. A clone without this file opens on an auto-arranged canvas, which is the intended state.
-src/main/resources/plugins/com.botmaker/sdk/flow-layout.json

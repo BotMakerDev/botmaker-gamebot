@@ -1,7 +1,7 @@
 package com.botmaker.gamebot;
 
 import com.botmaker.gamebot.plugins.sdk.Pictures;
-import com.botmaker.sdk.api.bot.ActivityContext;
+import com.botmaker.sdk.api.bot.Activities;
 import com.botmaker.sdk.api.bot.Outcome;
 import com.botmaker.sdk.api.interaction.Wait;
 import com.botmaker.sdk.api.vision.ImageClicker;
@@ -18,21 +18,21 @@ import java.time.Duration;
  * <p>{@link #body} is an ordinary {@code public static} method, named in the flow as {@code Collect::body}.
  * Nothing requires the name {@code body} and nothing requires one class per activity — what matters is that
  * the flow names a method javac resolves, so renaming this one is a compile error in {@code Sdk.java} rather
- * than an activity that quietly stops running. It is also, being a plain static method, one a JUnit test can
- * call with an {@code ActivityContext} of its own.
+ * than an activity that quietly stops running. It is also, being a plain static method with no arguments, one
+ * a JUnit test can call directly.
  */
 public final class Collect {
 
     private Collect() {}
 
-    public static Outcome body(ActivityContext ctx) {
+    public static Outcome body() {
         if (!ImageClicker.click(Pictures.COLLECT)) {
             // Nothing to collect. Not a failure — the flow sends this on to Battle.
-            return ctx.outcome("NOTHING_LEFT");
+            return Activities.outcome("NOTHING_LEFT");
         }
         // Randomized rather than fixed: a bot that clicks on exactly the same beat is a bot that reads
         // as one. Wait.between is here for that.
         Wait.between(Duration.ofMillis(600), Duration.ofMillis(1200));
-        return ctx.done();
+        return Activities.next();
     }
 }

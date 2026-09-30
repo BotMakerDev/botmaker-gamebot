@@ -1,6 +1,6 @@
 package com.botmaker.gamebot;
 
-import com.botmaker.sdk.api.bot.ActivityContext;
+import com.botmaker.sdk.api.bot.Activities;
 import com.botmaker.sdk.api.bot.Outcome;
 import com.botmaker.sdk.api.interaction.Wait;
 
@@ -16,8 +16,8 @@ public final class Rest {
 
     private Rest() {}
 
-    public static Outcome body(ActivityContext ctx) {
+    public static Outcome body() {
         Wait.time(Parameters.restBetween);
-        return ctx.done();
+        return Activities.next();
     }
 }

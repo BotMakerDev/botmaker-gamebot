@@ -1,7 +1,7 @@
 package com.botmaker.gamebot;
 
 import com.botmaker.gamebot.plugins.sdk.Pictures;
-import com.botmaker.sdk.api.bot.ActivityContext;
+import com.botmaker.sdk.api.bot.Activities;
 import com.botmaker.sdk.api.bot.Outcome;
 import com.botmaker.sdk.api.interaction.Wait;
 import com.botmaker.sdk.api.vision.ImageClicker;
@@ -22,20 +22,20 @@ public final class Battle {
 
     private Battle() {}
 
-    public static Outcome body(ActivityContext ctx) {
+    public static Outcome body() {
         if (!ImageClicker.click(Pictures.BATTLE)) {
             // No fight available. Treated as a loss so the flow rests and comes back, rather than
             // needing a third outcome for "could not even start".
-            return ctx.outcome("LOST");
+            return Activities.outcome("LOST");
         }
 
         for (int attempt = 0; Gamebot.keepTrying(attempt); attempt++) {
-            if (ImageFinder.find(Pictures.VICTORY)) return ctx.outcome("WON");
-            if (ImageFinder.find(Pictures.DEFEAT)) return ctx.outcome("LOST");
+            if (ImageFinder.find(Pictures.VICTORY)) return Activities.outcome("WON");
+            if (ImageFinder.find(Pictures.DEFEAT)) return Activities.outcome("LOST");
             Wait.seconds(1);
         }
         // Neither picture ever appeared. Something is on screen that this bot does not know about, so
         // report the outcome that leads somewhere safe and let goHome sort it out.
-        return ctx.outcome("LOST");
+        return Activities.outcome("LOST");
     }
 }

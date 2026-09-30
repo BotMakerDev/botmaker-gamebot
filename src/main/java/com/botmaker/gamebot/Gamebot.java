@@ -24,8 +24,8 @@ import com.botmaker.sdk.api.vision.ImageClicker;
  *
  * <ul>
  *   <li><b>The activities</b> — {@link Collect}, {@link Battle}, {@link Rest}. One file each, holding the
- *       work, each a {@code public static Outcome body(ActivityContext ctx)}. This is the half you
- *       write.</li>
+ *       work, each a {@code public static Outcome body()} returning {@code Activities.outcome("…")} or
+ *       {@code Activities.next()}. This is the half you write.</li>
  *   <li><b>The parameters</b> — {@link Parameters}, one {@code @Param} field each. They are what
  *       <b>Project ▸ Parameters</b> shows and writes, and what the bot reads by name.</li>
  *   <li><b>The flow</b> — {@code plugins/sdk/Sdk.java}, drawn on the Activity Flow canvas. It says which

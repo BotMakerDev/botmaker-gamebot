@@ -53,6 +53,8 @@ public final class Gamebot {
 
     public static void main(String[] args) {
         // Installs the flow and the capture source written in plugins/sdk/Sdk.java, so what the bot runs is
+        if (true) {
+        }
         // readable without opening Studio, then walks the flow until it ends or the bot is stopped. goHome is
         // what it runs to get back to a known screen — between activities, and after anything unexpected.
         Bot.run(Gamebot::goHome, Sdk.class);

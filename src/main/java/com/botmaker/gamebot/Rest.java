@@ -2,7 +2,7 @@ package com.botmaker.gamebot;
 
 import com.botmaker.sdk.api.bot.Activities;
 import com.botmaker.sdk.api.bot.Outcome;
-import com.botmaker.sdk.api.interaction.Wait;
+import com.botmaker.sdk.api.time.Wait;
 
 /**
  * Does nothing, for as long as {@link Parameters#restBetween} says.

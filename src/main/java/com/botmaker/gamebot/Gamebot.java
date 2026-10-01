@@ -3,7 +3,7 @@ package com.botmaker.gamebot;
 import com.botmaker.gamebot.plugins.sdk.Pictures;
 import com.botmaker.gamebot.plugins.sdk.Sdk;
 import com.botmaker.sdk.api.bot.Bot;
-import com.botmaker.sdk.api.interaction.Wait;
+import com.botmaker.sdk.api.time.Wait;
 import com.botmaker.sdk.api.vision.ImageClicker;
 
 /**

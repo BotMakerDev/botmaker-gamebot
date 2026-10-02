@@ -16,9 +16,9 @@ import com.botmaker.sdk.api.bot.Outcome;
 @Managed("outcomes")
 public final class Outcomes {
 
-    public static final Outcome NOTHING_LEFT = Outcome.named("NOTHING_LEFT");
-    public static final Outcome WON = Outcome.named("WON");
-    public static final Outcome LOST = Outcome.named("LOST");
+    public static final Outcome NOTHING_LEFT = Outcome.named("Nothing left");
+    public static final Outcome WON = Outcome.named("Won");
+    public static final Outcome LOST = Outcome.named("Lost");
 
     private Outcomes() {}
 }

@@ -20,12 +20,14 @@ import com.botmaker.sdk.api.vision.ImageClicker;
  * and the same code starts working against your game. Nothing here has to be edited to do that: a
  * {@link Pictures} entry names a file, not a compiled constant.
  *
- * <h2>The four pieces, and which one to edit</h2>
+ * <h2>The five pieces, and which one to edit</h2>
  *
  * <ul>
  *   <li><b>The activities</b> — {@link Collect}, {@link Battle}, {@link Rest}. One file each, holding the
- *       work, each a {@code public static Outcome body()} returning {@code Activities.outcome("…")} or
- *       {@code Activities.next()}. This is the half you write.</li>
+ *       work, each a {@code public static Outcome body()} returning one of the {@code Outcomes} constants or
+ *       {@code Outcome.NEXT}. This is the half you write.</li>
+ *   <li><b>The names</b> — {@code plugins/sdk/Activities.java} and {@code Outcomes.java}, one constant per
+ *       card and per outcome. The Activity Flow keeps them, and renames every use of one with it.</li>
  *   <li><b>The parameters</b> — {@link Parameters}, one {@code @Param} field each. They are what
  *       <b>Project ▸ Parameters</b> shows and writes, and what the bot reads by name.</li>
  *   <li><b>The flow</b> — {@code plugins/sdk/Sdk.java}, drawn on the Activity Flow canvas. It says which
@@ -53,8 +55,6 @@ public final class Gamebot {
 
     public static void main(String[] args) {
         // Installs the flow and the capture source written in plugins/sdk/Sdk.java, so what the bot runs is
-        if (true) {
-        }
         // readable without opening Studio, then walks the flow until it ends or the bot is stopped. goHome is
         // what it runs to get back to a known screen — between activities, and after anything unexpected.
         Bot.run(Gamebot::goHome, Sdk.class);

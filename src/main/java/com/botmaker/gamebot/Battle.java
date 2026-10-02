@@ -1,7 +1,7 @@
 package com.botmaker.gamebot;
 
+import com.botmaker.gamebot.plugins.sdk.Outcomes;
 import com.botmaker.gamebot.plugins.sdk.Pictures;
-import com.botmaker.sdk.api.bot.Activities;
 import com.botmaker.sdk.api.bot.Outcome;
 import com.botmaker.sdk.api.time.Wait;
 import com.botmaker.sdk.api.vision.ImageClicker;
@@ -14,9 +14,9 @@ import com.botmaker.sdk.api.vision.ImageFinder;
  * mean it is over, with a bounded number of attempts so a game that shows neither ends the activity instead
  * of hanging it.
  *
- * <p>The two outcomes this reports — {@code WON} and {@code LOST} — are the two the flow declares for this
- * activity, and each has a wire leaving its card. Reporting one the flow does not declare is not an error:
- * nothing is wired to it, so the run ends and one line says so.
+ * <p>The two outcomes this reports — {@code Outcomes.WON} and {@code Outcomes.LOST} — are the two the flow
+ * declares for this activity, and each has an arrow leaving its card. They are constants, so a typo is a
+ * compile error, and renaming one in the Activity Flow renames it here too.
  */
 public final class Battle {
 
@@ -26,16 +26,16 @@ public final class Battle {
         if (!ImageClicker.click(Pictures.BATTLE)) {
             // No fight available. Treated as a loss so the flow rests and comes back, rather than
             // needing a third outcome for "could not even start".
-            return Activities.outcome("LOST");
+            return Outcomes.LOST;
         }
 
         for (int attempt = 0; Gamebot.keepTrying(attempt); attempt++) {
-            if (ImageFinder.find(Pictures.VICTORY)) return Activities.outcome("WON");
-            if (ImageFinder.find(Pictures.DEFEAT)) return Activities.outcome("LOST");
+            if (ImageFinder.find(Pictures.VICTORY)) return Outcomes.WON;
+            if (ImageFinder.find(Pictures.DEFEAT)) return Outcomes.LOST;
             Wait.seconds(1);
         }
         // Neither picture ever appeared. Something is on screen that this bot does not know about, so
         // report the outcome that leads somewhere safe and let goHome sort it out.
-        return Activities.outcome("LOST");
+        return Outcomes.LOST;
     }
 }

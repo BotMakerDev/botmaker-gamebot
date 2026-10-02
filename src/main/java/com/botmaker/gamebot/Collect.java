@@ -1,7 +1,7 @@
 package com.botmaker.gamebot;
 
+import com.botmaker.gamebot.plugins.sdk.Outcomes;
 import com.botmaker.gamebot.plugins.sdk.Pictures;
-import com.botmaker.sdk.api.bot.Activities;
 import com.botmaker.sdk.api.bot.Outcome;
 import com.botmaker.sdk.api.time.Wait;
 import com.botmaker.sdk.api.vision.ImageClicker;
@@ -28,11 +28,11 @@ public final class Collect {
     public static Outcome body() {
         if (!ImageClicker.click(Pictures.COLLECT)) {
             // Nothing to collect. Not a failure — the flow sends this on to Battle.
-            return Activities.outcome("NOTHING_LEFT");
+            return Outcomes.NOTHING_LEFT;
         }
         // Randomized rather than fixed: a bot that clicks on exactly the same beat is a bot that reads
         // as one. Wait.between is here for that.
         Wait.between(Duration.ofMillis(600), Duration.ofMillis(1200));
-        return Activities.next();
+        return Outcome.NEXT;
     }
 }

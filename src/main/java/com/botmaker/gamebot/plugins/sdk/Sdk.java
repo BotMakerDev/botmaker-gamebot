@@ -5,6 +5,7 @@ import com.botmaker.gamebot.Collect;
 import com.botmaker.gamebot.Rest;
 import com.botmaker.plugin.api.managed.Managed;
 import com.botmaker.sdk.api.bot.BotSettings;
+import com.botmaker.sdk.api.bot.Outcome;
 import com.botmaker.sdk.api.capture.CaptureSource;
 import com.botmaker.sdk.api.flow.Flow;
 import com.botmaker.sdk.api.flow.FlowLayout;
@@ -32,24 +33,27 @@ public final class Sdk {
      * deleting the method is a compile error here rather than a flow that quietly does nothing.
      *
      * <p>What this one says: collect until there is nothing left, then fight; a win goes back to collecting
-     * and a loss rests first. Every arrow is a line below, and every activity is a class in this project.
+     * and a loss rests first. Every arrow is a line below, every activity is a class in this project, and every
+     * name is a constant of {@link Activities} or {@link Outcomes}.
      */
     @Managed("flow")
     public static Flow flow() {
         return Flow.of(
-                List.of(Flow.activity(Collect::body, "Collect", "Click the collect button while there is one.",
-                                true, false, true, List.of("NOTHING_LEFT")),
-                        Flow.activity(Battle::body, "Battle", "Start a fight and wait for it to end.",
-                                true, true, true, List.of("WON", "LOST")),
-                        Flow.activity(Rest::body, "Rest", "Wait for Parameters.restBetween, then go round again.",
+                List.of(Flow.activity(Activities.COLLECT, Collect::body,
+                                "Click the collect button while there is one.",
+                                true, false, true, List.of(Outcomes.NOTHING_LEFT)),
+                        Flow.activity(Activities.BATTLE, Battle::body, "Start a fight and wait for it to end.",
+                                true, true, true, List.of(Outcomes.WON, Outcomes.LOST)),
+                        Flow.activity(Activities.REST, Rest::body,
+                                "Wait for Parameters.restBetween, then go round again.",
                                 true, false, false, List.of())),
-                List.of(Flow.edge("Collect", "Collect", ""),
-                        Flow.edge("Collect", "Battle", "NOTHING_LEFT"),
-                        Flow.edge("Battle", "Collect", "WON"),
-                        Flow.edge("Battle", "Rest", "LOST"),
-                        Flow.edge("Rest", "Collect", "")),
+                List.of(Flow.edge(Activities.COLLECT, Activities.COLLECT, Outcome.NEXT),
+                        Flow.edge(Activities.COLLECT, Activities.BATTLE, Outcomes.NOTHING_LEFT),
+                        Flow.edge(Activities.BATTLE, Activities.COLLECT, Outcomes.WON),
+                        Flow.edge(Activities.BATTLE, Activities.REST, Outcomes.LOST),
+                        Flow.edge(Activities.REST, Activities.COLLECT, Outcome.NEXT)),
                 List.of(),
-                "Collect",
+                Activities.COLLECT,
                 Flow.limits(1000, 1000));
     }
 

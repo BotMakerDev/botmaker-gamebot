@@ -1,6 +1,5 @@
 package com.botmaker.gamebot;
 
-import com.botmaker.sdk.api.bot.Activities;
 import com.botmaker.sdk.api.bot.Outcome;
 import com.botmaker.sdk.api.time.Wait;
 
@@ -18,6 +17,6 @@ public final class Rest {
 
     public static Outcome body() {
         Wait.time(Parameters.restBetween);
-        return Activities.next();
+        return Outcome.NEXT;
     }
 }

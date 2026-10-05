@@ -6,7 +6,7 @@ flow deciding which of them runs next.
 Create it from **New Project ▸ Start from ▸ Gamebot** in BotMaker Studio, or from the command line:
 
 ```bash
-botmaker bot new mybot --from LiQiyeDev/botmaker-gamebot --package com.example.mybot
+botmaker bot new mybot --from BotMakerDev/botmaker-gamebot --package com.example.mybot
 ```
 
 ## It runs, and it matches nothing yet

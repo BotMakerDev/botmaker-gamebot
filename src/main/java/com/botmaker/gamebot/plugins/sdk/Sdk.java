@@ -94,8 +94,8 @@ public final class Sdk {
         return BotSettings.of(
                 BotSettings.clicks(500, 200, true),
                 BotSettings.vision(0.8, 0.05),
-                BotSettings.input(false, BotSettings.InputBackend.AUTO),
-                BotSettings.session(true, BotSettings.DisplayBackend.AUTO),
+                BotSettings.runIn(BotSettings.Where.PRIVATE_DISPLAY, false,
+                        BotSettings.DisplayBackend.AUTO, BotSettings.InputBackend.AUTO),
                 20, true);
     }
 

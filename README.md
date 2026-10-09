@@ -47,7 +47,7 @@ canvas is a separate string on purpose, so renaming the card does not touch your
 does not touch the canvas.
 
 `Sdk.java` and `Pictures.java` were copied into your project when the SDK was added, and they are yours from
-that moment. Studio rewrites the expression a `@Managed` method returns and nothing else, so comments,
+that moment. Studio rewrites the expression an `@SdkValue` method returns and nothing else, so comments,
 helpers and imports you add around them survive.
 
 ## Where the pixels come from

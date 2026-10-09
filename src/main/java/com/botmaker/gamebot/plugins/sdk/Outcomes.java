@@ -1,7 +1,7 @@
 package com.botmaker.gamebot.plugins.sdk;
 
-import com.botmaker.plugin.api.managed.Managed;
 import com.botmaker.sdk.api.bot.Outcome;
+import com.botmaker.sdk.api.bot.SdkValue;
 
 /**
  * What this bot's activities can report, one constant each — the ports on the Activity Flow's cards.
@@ -13,7 +13,7 @@ import com.botmaker.sdk.api.bot.Outcome;
  * <p>Everywhere else this is an ordinary class: a body returns {@code Outcomes.WON}, and a misspelled outcome is
  * a compile error rather than a run that quietly ends.
  */
-@Managed("outcomes")
+@SdkValue(SdkValue.Id.OUTCOMES)
 public final class Outcomes {
 
     public static final Outcome NOTHING_LEFT = Outcome.named("Nothing left");

@@ -49,7 +49,7 @@
             nothing else here has to move with it.
 
             This source is written for SDK 2.0.0: `Bot.run(Gamebot::goHome, Sdk.class)`, and
-            `@Param`/`@Managed` from the plugin contract, which the SDK brings. An earlier SDK does
+            `@Param` from the plugin contract and `@SdkValue`, which the SDK brings. An earlier SDK does
             not compile it.
         -->
         <dependency>

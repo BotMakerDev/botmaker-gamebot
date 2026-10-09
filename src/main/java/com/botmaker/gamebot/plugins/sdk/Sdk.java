@@ -3,9 +3,9 @@ package com.botmaker.gamebot.plugins.sdk;
 import com.botmaker.gamebot.Battle;
 import com.botmaker.gamebot.Collect;
 import com.botmaker.gamebot.Rest;
-import com.botmaker.plugin.api.managed.Managed;
 import com.botmaker.sdk.api.bot.BotSettings;
 import com.botmaker.sdk.api.bot.Outcome;
+import com.botmaker.sdk.api.bot.SdkValue;
 import com.botmaker.sdk.api.capture.CaptureSource;
 import com.botmaker.sdk.api.flow.Flow;
 import com.botmaker.sdk.api.flow.FlowLayout;
@@ -17,11 +17,11 @@ import java.util.Map;
  * The BotMaker SDK's values for this bot.
  *
  * <p>This file was copied here when the SDK was added, and it is <b>yours from that moment</b> — nothing
- * regenerates it. BotMaker rewrites the expression a {@code @Managed} method returns and nothing else, so
+ * regenerates it. BotMaker rewrites the expression an {@code @SdkValue} method returns and nothing else, so
  * comments, helper methods, imports you add and anything else you write around them survive untouched.
  *
  * <p>Your {@code main} names this class — {@code Bot.run(Gamebot::goHome, Sdk.class)} — and the SDK reads
- * each {@code @Managed} method off it. Leave it out of that call and the bot runs with no flow, the default
+ * each {@code @SdkValue} method off it. Leave it out of that call and the bot runs with no flow, the default
  * capture source and the default settings.
  */
 public final class Sdk {
@@ -36,7 +36,7 @@ public final class Sdk {
      * and a loss rests first. Every arrow is a line below, every activity is a class in this project, and every
      * name is a constant of {@link Activities} or {@link Outcomes}.
      */
-    @Managed("flow")
+    @SdkValue(SdkValue.Id.FLOW)
     public static Flow flow() {
         return Flow.of(
                 List.of(Flow.activity(Activities.COLLECT, Collect::body,
@@ -63,7 +63,7 @@ public final class Sdk {
      * <p>Nothing at runtime reads it: it is here so a copy of this bot opens on the same canvas. Dragging a
      * card rewrites it, and renaming a card rewrites it together with {@link #flow()}.
      */
-    @Managed("flow.layout")
+    @SdkValue(SdkValue.Id.FLOW_LAYOUT)
     public static FlowLayout flowLayout() {
         return FlowLayout.of(Map.ofEntries(
                 Map.entry("Collect", FlowLayout.at(80, 80)),
@@ -77,7 +77,7 @@ public final class Sdk {
      * <p>Chosen with <i>🎯 Capture Source</i> on the toolbar. {@code CaptureSource.desktop()} is the whole screen;
      * {@code CaptureSource.window("Game")} follows one window, wherever it moves.
      */
-    @Managed("capture")
+    @SdkValue(SdkValue.Id.CAPTURE)
     public static CaptureSource captureSource() {
         return CaptureSource.desktop();
     }
@@ -89,7 +89,7 @@ public final class Sdk {
      * <p>Changed in <i>⚙ Bot Settings</i>, and applied before the first click wherever the bot runs. What it
      * <em>launches</em> is not here: that is a fact about each computer, which Studio passes to the run.
      */
-    @Managed("settings")
+    @SdkValue(SdkValue.Id.SETTINGS)
     public static BotSettings settings() {
         return BotSettings.of(
                 BotSettings.clicks(500, 200, true),

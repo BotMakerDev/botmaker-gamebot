@@ -1,6 +1,6 @@
 package com.botmaker.gamebot.plugins.sdk;
 
-import com.botmaker.plugin.api.managed.Managed;
+import com.botmaker.sdk.api.bot.SdkValue;
 import com.botmaker.sdk.api.vision.ImageTemplate;
 
 /**
@@ -8,7 +8,7 @@ import com.botmaker.sdk.api.vision.ImageTemplate;
  *
  * <p>Managed by <i>🖼 Manage Pictures</i>, which adds, renames and removes these together with the image
  * files they point at and every use of them in your code. That is why the whole class is
- * {@code @Managed("pictures")} and the code canvas will not edit it: the canvas can rename the constant it
+ * {@code @SdkValue(PICTURES)} and the code canvas will not edit it: the canvas can rename the constant it
  * is looking at, and nothing else, which leaves the bot calling a name that is gone.
  *
  * <p>Everywhere else this is an ordinary class. Your code reads {@code Pictures.COLLECT} like any other
@@ -22,7 +22,7 @@ import com.botmaker.sdk.api.vision.ImageTemplate;
  * <p>They are built once and held, rather than constructed at each use: a template opens its file, and a bot
  * that polls for a picture once a second would otherwise open the same file once a second.
  */
-@Managed("pictures")
+@SdkValue(SdkValue.Id.PICTURES)
 public final class Pictures {
 
     public static final ImageTemplate COLLECT = new ImageTemplate("src/main/resources/images/collect.png");

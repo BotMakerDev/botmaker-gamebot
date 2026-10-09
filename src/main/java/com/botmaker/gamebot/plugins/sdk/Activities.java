@@ -1,6 +1,6 @@
 package com.botmaker.gamebot.plugins.sdk;
 
-import com.botmaker.plugin.api.managed.Managed;
+import com.botmaker.sdk.api.bot.SdkValue;
 import com.botmaker.sdk.api.flow.Activity;
 
 /**
@@ -12,7 +12,7 @@ import com.botmaker.sdk.api.flow.Activity;
  *
  * <p>Everywhere else this is an ordinary class: a misspelled activity is a compile error.
  */
-@Managed("activities")
+@SdkValue(SdkValue.Id.ACTIVITIES)
 public final class Activities {
 
     public static final Activity COLLECT = Activity.named("Collect");

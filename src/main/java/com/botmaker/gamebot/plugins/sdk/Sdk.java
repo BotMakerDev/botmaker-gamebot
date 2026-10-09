@@ -39,14 +39,17 @@ public final class Sdk {
     @SdkValue(SdkValue.Id.FLOW)
     public static Flow flow() {
         return Flow.of(
-                List.of(Flow.activity(Activities.COLLECT, Collect::body,
-                                "Click the collect button while there is one.",
-                                true, false, true, List.of(Outcomes.NOTHING_LEFT)),
-                        Flow.activity(Activities.BATTLE, Battle::body, "Start a fight and wait for it to end.",
-                                true, true, true, List.of(Outcomes.WON, Outcomes.LOST)),
-                        Flow.activity(Activities.REST, Rest::body,
-                                "Wait for Parameters.restBetween, then go round again.",
-                                true, false, false, List.of())),
+                List.of(Flow.activity(Activities.COLLECT, Collect::body)
+                                .described("Click the collect button while there is one.")
+                                .checksPopups()
+                                .reports(List.of(Outcomes.NOTHING_LEFT)),
+                        Flow.activity(Activities.BATTLE, Battle::body)
+                                .described("Start a fight and wait for it to end.")
+                                .goesHome()
+                                .checksPopups()
+                                .reports(List.of(Outcomes.WON, Outcomes.LOST)),
+                        Flow.activity(Activities.REST, Rest::body)
+                                .described("Wait for Parameters.restBetween, then go round again.")),
                 List.of(Flow.edge(Activities.COLLECT, Activities.COLLECT, Outcome.NEXT),
                         Flow.edge(Activities.COLLECT, Activities.BATTLE, Outcomes.NOTHING_LEFT),
                         Flow.edge(Activities.BATTLE, Activities.COLLECT, Outcomes.WON),
@@ -86,17 +89,14 @@ public final class Sdk {
      * How the bot clicks and looks: the pauses around a match, how sure a match has to be, whether it drives the
      * real mouse and keyboard, and whether it runs on a private display of its own.
      *
-     * <p>Changed in <i>⚙ Bot Settings</i>, and applied before the first click wherever the bot runs. What it
-     * <em>launches</em> is not here: that is a fact about each computer, which Studio passes to the run.
+     * <p>Changed in <i>⚙ Bot Settings</i>, and applied before the first click wherever the bot runs. Each
+     * setting changed from the default is a link after {@code defaults()} — {@code .foundDelay(400)},
+     * {@code .takesOver()} — so this bot changes none. What it <em>launches</em> is not here: that is a fact
+     * about each computer, which Studio passes to the run.
      */
     @SdkValue(SdkValue.Id.SETTINGS)
     public static BotSettings settings() {
-        return BotSettings.of(
-                BotSettings.clicks(500, 200, true),
-                BotSettings.vision(0.8, 0.05),
-                BotSettings.runIn(BotSettings.Where.PRIVATE_DISPLAY, false,
-                        BotSettings.DisplayBackend.AUTO, BotSettings.InputBackend.AUTO),
-                20, true);
+        return BotSettings.defaults();
     }
 
     private Sdk() {}

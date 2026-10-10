@@ -2,9 +2,9 @@ package com.botmaker.gamebot.plugins.sdk;
 
 import com.botmaker.gamebot.Battle;
 import com.botmaker.gamebot.Collect;
+import com.botmaker.gamebot.Gamebot;
 import com.botmaker.gamebot.Rest;
 import com.botmaker.sdk.api.bot.BotSettings;
-import com.botmaker.sdk.api.bot.Outcome;
 import com.botmaker.sdk.api.bot.SdkValue;
 import com.botmaker.sdk.api.capture.CaptureSource;
 import com.botmaker.sdk.api.flow.Flow;
@@ -20,7 +20,7 @@ import java.util.Map;
  * regenerates it. BotMaker rewrites the expression an {@code @SdkValue} method returns and nothing else, so
  * comments, helper methods, imports you add and anything else you write around them survive untouched.
  *
- * <p>Your {@code main} names this class — {@code Bot.run(Gamebot::goHome, Sdk.class)} — and the SDK reads
+ * <p>Your {@code main} names this class — {@code Bot.runFlow(Sdk.class)} — and the SDK reads
  * each {@code @SdkValue} method off it. Leave it out of that call and the bot runs with no flow, the default
  * capture source and the default settings.
  */
@@ -33,31 +33,31 @@ public final class Sdk {
      * deleting the method is a compile error here rather than a flow that quietly does nothing.
      *
      * <p>What this one says: collect until there is nothing left, then fight; a win goes back to collecting
-     * and a loss rests first. Every arrow is a line below, every activity is a class in this project, and every
-     * name is a constant of {@link Activities} or {@link Outcomes}.
+     * and a loss rests first. Every arrow is a line below, every activity is a class in this project and an enum
+     * of {@link Activities}, and every outcome is a constant of its activity's enum. {@code home} is what gets the
+     * game back to a known screen: at start-up, after anything unexpected, and before Battle.
      */
     @SdkValue(SdkValue.Id.FLOW)
     public static Flow flow() {
         return Flow.of(
-                List.of(Flow.activity(Activities.COLLECT, Collect::body)
+                List.of(Flow.activity(Activities.Collect.class, Collect::body)
                                 .described("Click the collect button while there is one.")
-                                .checksPopups()
-                                .reports(List.of(Outcomes.NOTHING_LEFT)),
-                        Flow.activity(Activities.BATTLE, Battle::body)
+                                .checksPopups(),
+                        Flow.activity(Activities.Battle.class, Battle::body)
                                 .described("Start a fight and wait for it to end.")
                                 .goesHome()
-                                .checksPopups()
-                                .reports(List.of(Outcomes.WON, Outcomes.LOST)),
-                        Flow.activity(Activities.REST, Rest::body)
+                                .checksPopups(),
+                        Flow.activity(Activities.Rest.class, Rest::body)
                                 .described("Wait for Parameters.restBetween, then go round again.")),
-                List.of(Flow.edge(Activities.COLLECT, Activities.COLLECT, Outcome.NEXT),
-                        Flow.edge(Activities.COLLECT, Activities.BATTLE, Outcomes.NOTHING_LEFT),
-                        Flow.edge(Activities.BATTLE, Activities.COLLECT, Outcomes.WON),
-                        Flow.edge(Activities.BATTLE, Activities.REST, Outcomes.LOST),
-                        Flow.edge(Activities.REST, Activities.COLLECT, Outcome.NEXT)),
+                List.of(Flow.edge(Activities.Collect.NEXT, Activities.Collect.class),
+                        Flow.edge(Activities.Collect.NOTHING_LEFT, Activities.Battle.class),
+                        Flow.edge(Activities.Battle.WON, Activities.Collect.class),
+                        Flow.edge(Activities.Battle.LOST, Activities.Rest.class),
+                        Flow.edge(Activities.Rest.NEXT, Activities.Collect.class)),
                 List.of(),
-                Activities.COLLECT,
-                Flow.limits(1000, 1000));
+                Activities.Collect.class,
+                Flow.limits(1000, 1000))
+                .home(Gamebot::goHome);
     }
 
     /**

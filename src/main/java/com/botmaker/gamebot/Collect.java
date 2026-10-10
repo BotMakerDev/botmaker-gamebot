@@ -1,8 +1,7 @@
 package com.botmaker.gamebot;
 
-import com.botmaker.gamebot.plugins.sdk.Outcomes;
+import com.botmaker.gamebot.plugins.sdk.Activities;
 import com.botmaker.gamebot.plugins.sdk.Pictures;
-import com.botmaker.sdk.api.bot.Outcome;
 import com.botmaker.sdk.api.time.Wait;
 import com.botmaker.sdk.api.vision.ImageClicker;
 
@@ -20,19 +19,22 @@ import java.time.Duration;
  * the flow names a method javac resolves, so renaming this one is a compile error in {@code Sdk.java} rather
  * than an activity that quietly stops running. It is also, being a plain static method with no arguments, one
  * a JUnit test can call directly.
+ *
+ * <p>It returns {@link Activities.Collect}, this activity's own enum, so it can report only what the Collect card
+ * has a port for.
  */
 public final class Collect {
 
     private Collect() {}
 
-    public static Outcome body() {
+    public static Activities.Collect body() {
         if (!ImageClicker.click(Pictures.COLLECT)) {
             // Nothing to collect. Not a failure — the flow sends this on to Battle.
-            return Outcomes.NOTHING_LEFT;
+            return Activities.Collect.NOTHING_LEFT;
         }
         // Randomized rather than fixed: a bot that clicks on exactly the same beat is a bot that reads
         // as one. Wait.between is here for that.
         Wait.between(Duration.ofMillis(600), Duration.ofMillis(1200));
-        return Outcome.NEXT;
+        return Activities.Collect.NEXT;
     }
 }

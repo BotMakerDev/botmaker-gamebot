@@ -24,17 +24,18 @@ import com.botmaker.sdk.api.vision.ImageClicker;
  *
  * <ul>
  *   <li><b>The activities</b> — {@link Collect}, {@link Battle}, {@link Rest}. One file each, holding the
- *       work, each a {@code public static Outcome body()} returning one of the {@code Outcomes} constants or
- *       {@code Outcome.NEXT}. This is the half you write.</li>
- *   <li><b>The names</b> — {@code plugins/sdk/Activities.java} and {@code Outcomes.java}, one constant per
- *       card and per outcome. The Activity Flow keeps them, and renames every use of one with it.</li>
+ *       work, each a {@code public static} {@code body()} returning one of its own activity's outcomes —
+ *       {@code Activities.Collect body()}. This is the half you write.</li>
+ *   <li><b>The names</b> — {@code plugins/sdk/Activities.java}, one enum per card and one constant per
+ *       outcome. The Activity Flow keeps them, and renames every use of one with it.</li>
  *   <li><b>The parameters</b> — {@link Parameters}, one {@code @Param} field each. They are what
  *       <b>Project ▸ Parameters</b> shows and writes, and what the bot reads by name.</li>
  *   <li><b>The flow</b> — {@code plugins/sdk/Sdk.java}, drawn on the Activity Flow canvas. It says which
- *       activity starts, which method each card runs, and where each outcome leads. Draw it in Studio, or
- *       edit the expression by hand — it is ordinary Java either way.</li>
- *   <li><b>This class</b> — the wiring. {@code Bot.run} reads the flow and the capture source off
- *       {@code Sdk.class} and walks the flow with a way home.</li>
+ *       activity starts, which method each card runs, where each outcome leads, and how the bot gets home
+ *       ({@code .home(Gamebot::goHome)}). Draw it in Studio, or edit the expression by hand — it is ordinary
+ *       Java either way.</li>
+ *   <li><b>This class</b> — the wiring. {@code Bot.runFlow} reads the flow and the capture source off
+ *       {@code Sdk.class} and walks the flow.</li>
  * </ul>
  *
  * <p>The two halves are joined by a <b>method reference</b>: {@code Collect::body} in the flow is the same
@@ -55,19 +56,18 @@ public final class Gamebot {
 
     public static void main(String[] args) {
         // Installs the flow and the capture source written in plugins/sdk/Sdk.java, so what the bot runs is
-        // readable without opening Studio, then walks the flow until it ends or the bot is stopped. goHome is
-        // what it runs to get back to a known screen — between activities, and after anything unexpected.
-        Bot.run(Gamebot::goHome, Sdk.class);
+        // readable without opening Studio, then walks the flow until it ends or the bot is stopped.
+        Bot.runFlow(Sdk.class);
     }
 
     /**
-     * Back to the screen every activity expects to start from.
+     * Back to the screen every activity expects to start from — the flow's {@code .home(Gamebot::goHome)}.
      *
-     * <p>Called between activities and whenever the bot loses its place, so it has to be safe to run at any
-     * moment — including when the game is already home. Pressing a close button until there is no close
-     * button left is the usual shape, and it is what this does.
+     * <p>Called before an activity that goes home first and whenever the bot loses its place, so it has to be
+     * safe to run at any moment — including when the game is already home. Pressing a close button until there
+     * is no close button left is the usual shape, and it is what this does.
      */
-    static void goHome() {
+    public static void goHome() {
         for (int attempt = 0; attempt < 5; attempt++) {
             if (!ImageClicker.click(Pictures.HOME)) {
                 return;

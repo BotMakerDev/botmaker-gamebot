@@ -30,15 +30,18 @@ or renaming a picture has to move the file, the constant and every use of it tog
 
 ## The four pieces
 
-- **The activities** — `Collect`, `Battle`, `Rest`, one file each. This is the half you write.
+- **The activities** — `Collect`, `Battle`, `Rest`, one file each. This is the half you write. Each `body()`
+  returns its own activity's enum from `plugins/sdk/Activities.java` (`Activities.Collect`), whose constants
+  are the outcomes its card has ports for — so a body reporting another activity's outcome does not compile.
 - **The parameters** — `Parameters.java`, one `@Param` field each. That file *is* what
   **Project ▸ Parameters** shows, and the window writes back into it.
 - **The pictures** — `plugins/sdk/Pictures.java`, one constant per file under `src/main/resources/images`.
 - **The flow** — `plugins/sdk/Sdk.java`, drawn on the Activity Flow canvas in Studio. It says which activity
-  starts, which method each card runs and where each outcome leads: `Collect` loops on itself until there is
-  nothing left, then `Battle`; a win goes back to collecting, a loss rests first.
-- **`Gamebot`** — the wiring. `Bot.run(Gamebot::goHome, Sdk.class)` reads the flow and the capture source
-  off `Sdk.java` and walks the flow with a way home.
+  starts, which method each card runs, where each outcome leads and how the bot gets home
+  (`.home(Gamebot::goHome)`): `Collect` loops on itself until there is nothing left, then `Battle`; a win goes
+  back to collecting, a loss rests first.
+- **`Gamebot`** — the wiring. `Bot.runFlow(Sdk.class)` reads the flow and the capture source off `Sdk.java`
+  and walks the flow.
 
 The canvas and the code are joined by a **method reference**: `Collect::body` in `Sdk.java` is the same four
 tokens javac resolves in `Collect.java`, so renaming or deleting an activity's method is a compile error

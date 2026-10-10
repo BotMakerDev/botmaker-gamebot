@@ -40,9 +40,10 @@ import com.botmaker.sdk.api.vision.ImageClicker;
  *
  * <p>The two halves are joined by a <b>method reference</b>: {@code Collect::body} in the flow is the same
  * four tokens javac resolves here, so renaming or deleting an activity's method is a compile error naming
- * {@code Sdk.java}, not a card that silently stops doing anything. An activity's <em>label</em> on the
- * canvas is a separate string on purpose — renaming the card does not touch your code, and renaming your
- * class does not touch the canvas.
+ * {@code Sdk.java}, not a card that silently stops doing anything. A card's <em>label</em> is its enum's name
+ * as words — {@code Activities.Collect} reads "Collect" — so renaming the card renames the enum and every use
+ * of it, while the class holding the work keeps its own name: renaming {@link Collect} does not touch the
+ * canvas.
  *
  * <h2>Capture</h2>
  *

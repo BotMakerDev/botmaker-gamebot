@@ -28,7 +28,7 @@ or renaming a picture has to move the file, the constant and every use of it tog
 | `defeat.png` | Something that is on screen only after a loss. |
 | `home.png` | The close/back button that gets you back to the main screen. |
 
-## The four pieces
+## The five pieces
 
 - **The activities** — `Collect`, `Battle`, `Rest`, one file each. This is the half you write. Each `body()`
   returns its own activity's enum from `plugins/sdk/Activities.java` (`Activities.Collect`), whose constants
@@ -45,9 +45,9 @@ or renaming a picture has to move the file, the constant and every use of it tog
 
 The canvas and the code are joined by a **method reference**: `Collect::body` in `Sdk.java` is the same four
 tokens javac resolves in `Collect.java`, so renaming or deleting an activity's method is a compile error
-naming the file it broke — never a card that silently stops doing anything. An activity's *label* on the
-canvas is a separate string on purpose, so renaming the card does not touch your code and renaming your class
-does not touch the canvas.
+naming the file it broke — never a card that silently stops doing anything. A card's *label* is its enum's
+name as words (`Activities.Collect` reads "Collect"), so renaming the card renames the enum and every use of
+it, while the class holding the work keeps its own name: renaming `Collect` does not touch the canvas.
 
 `Sdk.java` and `Pictures.java` were copied into your project when the SDK was added, and they are yours from
 that moment. Studio rewrites the expression an `@SdkValue` method returns and nothing else, so comments,

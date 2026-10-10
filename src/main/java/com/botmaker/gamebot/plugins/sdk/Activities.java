@@ -21,7 +21,7 @@ public final class Activities {
 
     public enum Collect implements Outcome { NEXT, NOTHING_LEFT }
 
-    public enum Battle implements Outcome { NEXT, WON, LOST }
+    public enum Battle implements Outcome { WON, LOST }
 
     public enum Rest implements Outcome { NEXT }
 

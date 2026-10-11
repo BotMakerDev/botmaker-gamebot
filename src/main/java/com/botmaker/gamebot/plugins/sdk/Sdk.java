@@ -1,13 +1,17 @@
 package com.botmaker.gamebot.plugins.sdk;
 
 import com.botmaker.gamebot.Gamebot;
+import com.botmaker.plugin.api.params.Param;
 import com.botmaker.sdk.api.bot.BotSettings;
+import com.botmaker.sdk.api.bot.Outcome;
 import com.botmaker.sdk.api.bot.SdkValue;
 import com.botmaker.sdk.api.capture.CaptureSource;
+import com.botmaker.sdk.api.flow.Flow;
 import com.botmaker.sdk.api.flow.FlowLayout;
 import com.botmaker.sdk.api.flow.Run;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The BotMaker SDK's values for this bot.
@@ -16,22 +20,35 @@ import java.util.Map;
  * regenerates it. BotMaker rewrites the expression an {@code @SdkValue} method returns and nothing else, so
  * comments, helper methods, imports you add and anything else you write around them survive untouched.
  *
- * <p>Your {@code main} names this class — {@code Bot.runFlow(Sdk.class)} — and the SDK reads
- * each {@code @SdkValue} method off it. Leave it out of that call and the bot runs with no flow, the default
- * capture source and the default settings.
+ * <p>Your {@code main} names this class — {@code Bot.runFlow(Sdk.flow, Sdk.doSetup, Sdk.skip, Sdk.class)} — and
+ * the SDK reads each {@code @SdkValue} method off it. Leave it out of that call and the bot runs with no home, the
+ * default capture source and the default settings.
  */
 public final class Sdk {
 
+    /** Which of {@link Flows} the bot runs. The person running the bot picks it in the Runner. */
+    @Param(category = "Run", visibility = Param.PUBLIC, description = "Which flow the bot runs")
+    public static Flow flow = Flows.MAIN;
+
+    /** Whether {@link #run()}'s setup runs first. Tick it on a new computer, or after changing a game setting. */
+    @Param(category = "Run", visibility = Param.PUBLIC,
+            description = "Set the game up first: tick it on a new computer or after changing a game setting")
+    public static boolean doSetup = true;
+
+    /** The activities this run skips: only one the flow's card lets the runner switch off. */
+    @Param(category = "Run", visibility = Param.PUBLIC, description = "Activities this run skips")
+    public static Set<Class<? extends Outcome>> skip = Set.of();
+
     /**
-     * Which of {@link Flows} runs when nobody picks one, and the game's home and setup, which no flow owns.
+     * The game's home and setup, which no flow owns.
      *
      * <p>Changed in <i>Project ▸ Activity Flow</i>. {@code home} is what gets the game back to a known screen: at
      * start-up, after anything unexpected, and before Battle. {@code setup} makes the game ready for the bot once
-     * it has started it.
+     * it has started it, when {@link #doSetup} is ticked.
      */
     @SdkValue(SdkValue.Id.RUN)
     public static Run run() {
-        return Run.of(Flows.MAIN)
+        return Run.of()
                 .home(Gamebot::goHome)
                 .setup(Gamebot::setup);
     }

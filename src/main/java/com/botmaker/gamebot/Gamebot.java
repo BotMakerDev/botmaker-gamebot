@@ -34,8 +34,8 @@ import com.botmaker.sdk.api.vision.ImageClicker;
  *       activity starts, which method each card runs, where each outcome leads, and how the bot gets home
  *       ({@code .home(Gamebot::goHome)}). Draw it in Studio, or edit the expression by hand — it is ordinary
  *       Java either way.</li>
- *   <li><b>This class</b> — the wiring. {@code Bot.runFlow} reads the flow and the capture source off
- *       {@code Sdk.class} and walks the flow.</li>
+ *   <li><b>This class</b> — the wiring. {@code Bot.runFlow} walks the flow {@code Sdk.flow} names, with the
+ *       home, setup and capture source it reads off {@code Sdk.class}.</li>
  * </ul>
  *
  * <p>The two halves are joined by a <b>method reference</b>: {@code Collect::body} in the flow is the same
@@ -56,9 +56,9 @@ public final class Gamebot {
     private Gamebot() {}
 
     public static void main(String[] args) {
-        // Installs the flow and the capture source written in plugins/sdk/Sdk.java, so what the bot runs is
-        // readable without opening Studio, then walks the flow until it ends or the bot is stopped.
-        Bot.runFlow(Sdk.class);
+        // Walks the flow the person running the bot picked, skipping what they switched off, with the home, setup
+        // and capture source written in plugins/sdk/Sdk.java, until the flow ends or the bot is stopped.
+        Bot.runFlow(Sdk.flow, Sdk.doSetup, Sdk.skip, Sdk.class);
     }
 
     /**
@@ -78,15 +78,14 @@ public final class Gamebot {
     }
 
     /**
-     * Makes the game ready for this bot — {@code Sdk.run()}'s {@code .setup(Gamebot::setup)}, run once on each
-     * computer after the bot has started the game, before {@link #goHome()}. The game keeps its settings, so later
-     * runs skip it.
+     * Makes the game ready for this bot — {@code Sdk.run()}'s {@code .setup(Gamebot::setup)}, run after the bot has
+     * started the game, before {@link #goHome()}, when {@code Sdk.doSetup} is ticked. The game keeps its settings,
+     * so the person running the bot unticks it once the game is set up.
      *
      * <p>This is where a bot sets the game's own settings to what it needs: its resolution and window mode, its
-     * language, and whatever a user chose in {@link Parameters} that the game has a setting for. Put those
-     * parameters in {@code @Param(category = Setup.CATEGORY)}: changing one runs the setup again. Open the game's
+     * language, and whatever a user chose in {@link Parameters} that the game has a setting for. Open the game's
      * settings with a picture, check each value with a picture and change it when it differs; when the bot cannot
-     * change one itself, {@code Setup.fail("Set the game to windowed mode")} ends the run and tells the user what to
+     * change one itself, {@code Bot.stop("Set the game to windowed mode")} ends the run and tells the user what to
      * do. Empty here, since the pictures it would need are your game's.
      */
     public static void setup() {

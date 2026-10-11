@@ -40,15 +40,14 @@ or renaming a picture has to move the file, the constant and every use of it tog
   canvas in Studio. `Flows.MAIN` says which activity starts, which method each card runs and where each outcome
   leads: `Collect` loops on itself until there is nothing left, then `Battle`; a win goes back to collecting, a
   loss rests first. `Rest` is `.switchable()`: the person running the bot may switch it off for their computer.
-- **The run** — `Sdk.run()` in `plugins/sdk/Sdk.java`: which flow runs when nobody picks one
-  (`Run.of(Flows.MAIN)`), how the bot gets home (`.home(Gamebot::goHome)`) and how it makes the game ready, its
-  settings included (`.setup(Gamebot::setup)`) — one each for the whole bot, whichever flow runs. The setup runs
-  once per computer; a `@Param(category = Setup.CATEGORY)` that changes value makes it run again.
-- **This computer's choices** — run properties, never the bot's files: `botmaker.flow=DAILY` runs another
-  `Flows` constant, `botmaker.activity.Rest=off` switches a `.switchable()` activity off, and `botmaker.setup=on`
-  runs the setup again.
-- **`Gamebot`** — the wiring. `Bot.runFlow(Sdk.class)` reads the run and the capture source off `Sdk.java`
-  and walks the flow the run names.
+- **The run** — `Sdk.run()` in `plugins/sdk/Sdk.java`: how the bot gets home (`.home(Gamebot::goHome)`) and how
+  it makes the game ready, its settings included (`.setup(Gamebot::setup)`) — one each for the whole bot,
+  whichever flow runs.
+- **The run choices** — three `@Param`s beside it in `Sdk.java`, shown in the Runner: `flow` (which `Flows`
+  constant runs, `Flows.MAIN`), `doSetup` (run the setup first: tick it on a new computer or after changing a game
+  setting) and `skip` (activities switched off, each one a card marks `.switchable()`: `Set.of(Activities.Rest.class)`).
+- **`Gamebot`** — the wiring. `Bot.runFlow(Sdk.flow, Sdk.doSetup, Sdk.skip, Sdk.class)` walks the chosen flow with
+  the run and the capture source it reads off `Sdk.java`.
 
 The canvas and the code are joined by a **method reference**: `Collect::body` in `Sdk.java` is the same four
 tokens javac resolves in `Collect.java`, so renaming or deleting an activity's method is a compile error

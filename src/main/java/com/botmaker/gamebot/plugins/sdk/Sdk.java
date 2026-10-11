@@ -26,16 +26,24 @@ import java.util.Set;
  */
 public final class Sdk {
 
-    /** Which of {@link Flows} the bot runs. The person running the bot picks it in the Runner. */
+    /**
+     * Which of {@link Flows} the bot runs. The person running the bot picks it in the Runner.
+     *
+     * <p>The SDK declared these three parameters: BotMaker writes one back if it goes missing, and only their
+     * values are changed, in the Runner or in <i>Project ▸ Parameters</i>.
+     */
+    @SdkValue(SdkValue.Id.FLOW)
     @Param(category = "Run", visibility = Param.PUBLIC, description = "Which flow the bot runs")
     public static Flow flow = Flows.MAIN;
 
     /** Whether {@link #run()}'s setup runs first. Tick it on a new computer, or after changing a game setting. */
+    @SdkValue(SdkValue.Id.DO_SETUP)
     @Param(category = "Run", visibility = Param.PUBLIC,
             description = "Set the game up first: tick it on a new computer or after changing a game setting")
     public static boolean doSetup = true;
 
     /** The activities this run skips: only one the flow's card lets the runner switch off. */
+    @SdkValue(SdkValue.Id.SKIP)
     @Param(category = "Run", visibility = Param.PUBLIC, description = "Activities this run skips")
     public static Set<Class<? extends Outcome>> skip = Set.of();
 

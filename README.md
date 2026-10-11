@@ -37,8 +37,9 @@ or renaming a picture has to move the file, the constant and every use of it tog
   **Project ▸ Parameters** shows, and the window writes back into it.
 - **The pictures** — `plugins/sdk/Pictures.java`, one constant per file under `src/main/resources/images`.
 - **The flow** — `plugins/sdk/Sdk.java`, drawn on the Activity Flow canvas in Studio. It says which activity
-  starts, which method each card runs, where each outcome leads and how the bot gets home
-  (`.home(Gamebot::goHome)`): `Collect` loops on itself until there is nothing left, then `Battle`; a win goes
+  starts, which method each card runs, where each outcome leads, how the bot gets home
+  (`.home(Gamebot::goHome)`) and how it makes the game ready, its settings included (`.setup(Gamebot::setup)`):
+  `Collect` loops on itself until there is nothing left, then `Battle`; a win goes
   back to collecting, a loss rests first.
 - **`Gamebot`** — the wiring. `Bot.runFlow(Sdk.class)` reads the flow and the capture source off `Sdk.java`
   and walks the flow.

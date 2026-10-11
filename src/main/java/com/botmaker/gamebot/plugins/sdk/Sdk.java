@@ -57,7 +57,8 @@ public final class Sdk {
                 List.of(),
                 Activities.Collect.class,
                 Flow.limits(1000, 1000))
-                .home(Gamebot::goHome);
+                .home(Gamebot::goHome)
+                .setup(Gamebot::setup);
     }
 
     /**

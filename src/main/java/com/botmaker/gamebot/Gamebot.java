@@ -78,6 +78,19 @@ public final class Gamebot {
     }
 
     /**
+     * Makes the game ready for this bot — the flow's {@code .setup(Gamebot::setup)}, run each time the bot has
+     * started the game, before {@link #goHome()}.
+     *
+     * <p>This is where a bot sets the game's own settings to what it needs: its resolution and window mode, its
+     * language, and whatever a user chose in {@link Parameters} that the game has a setting for. Open the game's
+     * settings with a picture, check each value with a picture and change it when it differs; when the bot cannot
+     * change one itself, {@code Setup.fail("Set the game to windowed mode")} ends the run and tells the user what to
+     * do. Empty here, since the pictures it would need are your game's.
+     */
+    public static void setup() {
+    }
+
+    /**
      * Whether an activity that has not got anywhere yet should keep trying.
      *
      * <p>Every loop inside an activity needs a way out that is not "the game changed" — a bot that cannot

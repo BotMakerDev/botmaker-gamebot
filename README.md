@@ -42,7 +42,11 @@ or renaming a picture has to move the file, the constant and every use of it tog
   loss rests first. `Rest` is `.switchable()`: the person running the bot may switch it off for their computer.
 - **The run** — `Sdk.run()` in `plugins/sdk/Sdk.java`: which flow runs when nobody picks one
   (`Run.of(Flows.MAIN)`), how the bot gets home (`.home(Gamebot::goHome)`) and how it makes the game ready, its
-  settings included (`.setup(Gamebot::setup)`) — one each for the whole bot, whichever flow runs.
+  settings included (`.setup(Gamebot::setup)`) — one each for the whole bot, whichever flow runs. The setup runs
+  once per computer; a `@Param(category = Setup.CATEGORY)` that changes value makes it run again.
+- **This computer's choices** — run properties, never the bot's files: `botmaker.flow=DAILY` runs another
+  `Flows` constant, `botmaker.activity.Rest=off` switches a `.switchable()` activity off, and `botmaker.setup=on`
+  runs the setup again.
 - **`Gamebot`** — the wiring. `Bot.runFlow(Sdk.class)` reads the run and the capture source off `Sdk.java`
   and walks the flow the run names.
 

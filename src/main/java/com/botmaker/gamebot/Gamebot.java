@@ -78,11 +78,13 @@ public final class Gamebot {
     }
 
     /**
-     * Makes the game ready for this bot — {@code Sdk.run()}'s {@code .setup(Gamebot::setup)}, run each time the bot has
-     * started the game, before {@link #goHome()}.
+     * Makes the game ready for this bot — {@code Sdk.run()}'s {@code .setup(Gamebot::setup)}, run once on each
+     * computer after the bot has started the game, before {@link #goHome()}. The game keeps its settings, so later
+     * runs skip it.
      *
      * <p>This is where a bot sets the game's own settings to what it needs: its resolution and window mode, its
-     * language, and whatever a user chose in {@link Parameters} that the game has a setting for. Open the game's
+     * language, and whatever a user chose in {@link Parameters} that the game has a setting for. Put those
+     * parameters in {@code @Param(category = Setup.CATEGORY)}: changing one runs the setup again. Open the game's
      * settings with a picture, check each value with a picture and change it when it differs; when the bot cannot
      * change one itself, {@code Setup.fail("Set the game to windowed mode")} ends the run and tells the user what to
      * do. Empty here, since the pictures it would need are your game's.

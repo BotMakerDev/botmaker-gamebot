@@ -78,7 +78,7 @@ public final class Gamebot {
     }
 
     /**
-     * Makes the game ready for this bot — the flow's {@code .setup(Gamebot::setup)}, run each time the bot has
+     * Makes the game ready for this bot — {@code Sdk.run()}'s {@code .setup(Gamebot::setup)}, run each time the bot has
      * started the game, before {@link #goHome()}.
      *
      * <p>This is where a bot sets the game's own settings to what it needs: its resolution and window mode, its

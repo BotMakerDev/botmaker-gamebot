@@ -1,16 +1,12 @@
 package com.botmaker.gamebot.plugins.sdk;
 
-import com.botmaker.gamebot.Battle;
-import com.botmaker.gamebot.Collect;
 import com.botmaker.gamebot.Gamebot;
-import com.botmaker.gamebot.Rest;
 import com.botmaker.sdk.api.bot.BotSettings;
 import com.botmaker.sdk.api.bot.SdkValue;
 import com.botmaker.sdk.api.capture.CaptureSource;
-import com.botmaker.sdk.api.flow.Flow;
 import com.botmaker.sdk.api.flow.FlowLayout;
+import com.botmaker.sdk.api.flow.Run;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,52 +23,32 @@ import java.util.Map;
 public final class Sdk {
 
     /**
-     * The activity flow: what runs, in what order, and what stops it.
+     * Which of {@link Flows} runs when nobody picks one, and the game's home and setup, which no flow owns.
      *
-     * <p>Drawn in <i>Project ▸ Activity Flow</i>. An activity's work is a method reference, so renaming or
-     * deleting the method is a compile error here rather than a flow that quietly does nothing.
-     *
-     * <p>What this one says: collect until there is nothing left, then fight; a win goes back to collecting
-     * and a loss rests first. Every arrow is a line below, every activity is a class in this project and an enum
-     * of {@link Activities}, and every outcome is a constant of its activity's enum. {@code home} is what gets the
-     * game back to a known screen: at start-up, after anything unexpected, and before Battle.
+     * <p>Changed in <i>Project ▸ Activity Flow</i>. {@code home} is what gets the game back to a known screen: at
+     * start-up, after anything unexpected, and before Battle. {@code setup} makes the game ready for the bot once
+     * it has started it.
      */
-    @SdkValue(SdkValue.Id.FLOW)
-    public static Flow flow() {
-        return Flow.of(
-                List.of(Flow.activity(Activities.Collect.class, Collect::body)
-                                .described("Click the collect button while there is one.")
-                                .checksPopups(),
-                        Flow.activity(Activities.Battle.class, Battle::body)
-                                .described("Start a fight and wait for it to end.")
-                                .goesHome()
-                                .checksPopups(),
-                        Flow.activity(Activities.Rest.class, Rest::body)
-                                .described("Wait for Parameters.restBetween, then go round again.")),
-                List.of(Flow.edge(Activities.Collect.NEXT, Activities.Collect.class),
-                        Flow.edge(Activities.Collect.NOTHING_LEFT, Activities.Battle.class),
-                        Flow.edge(Activities.Battle.WON, Activities.Collect.class),
-                        Flow.edge(Activities.Battle.LOST, Activities.Rest.class),
-                        Flow.edge(Activities.Rest.NEXT, Activities.Collect.class)),
-                List.of(),
-                Activities.Collect.class,
-                Flow.limits(1000, 1000))
+    @SdkValue(SdkValue.Id.RUN)
+    public static Run run() {
+        return Run.of(Flows.MAIN)
                 .home(Gamebot::goHome)
                 .setup(Gamebot::setup);
     }
 
     /**
-     * Where each card sits in <i>Project ▸ Activity Flow</i>, keyed by activity name.
+     * Where each card sits in <i>Project ▸ Activity Flow</i>, keyed by flow, then by activity name.
      *
      * <p>Nothing at runtime reads it: it is here so a copy of this bot opens on the same canvas. Dragging a
-     * card rewrites it, and renaming a card rewrites it together with {@link #flow()}.
+     * card rewrites it, and renaming a card rewrites it together with {@link Flows}.
      */
     @SdkValue(SdkValue.Id.FLOW_LAYOUT)
     public static FlowLayout flowLayout() {
         return FlowLayout.of(Map.ofEntries(
-                Map.entry("Collect", FlowLayout.at(80, 80)),
-                Map.entry("Battle", FlowLayout.at(380, 80)),
-                Map.entry("Rest", FlowLayout.at(380, 300))), true);
+                Map.entry("MAIN", FlowLayout.cards(Map.ofEntries(
+                        Map.entry("Collect", FlowLayout.at(80, 80)),
+                        Map.entry("Battle", FlowLayout.at(380, 80)),
+                        Map.entry("Rest", FlowLayout.at(380, 300)))))), true);
     }
 
     /**

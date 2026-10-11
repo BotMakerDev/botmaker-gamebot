@@ -36,13 +36,15 @@ or renaming a picture has to move the file, the constant and every use of it tog
 - **The parameters** — `Parameters.java`, one `@Param` field each. That file *is* what
   **Project ▸ Parameters** shows, and the window writes back into it.
 - **The pictures** — `plugins/sdk/Pictures.java`, one constant per file under `src/main/resources/images`.
-- **The flow** — `plugins/sdk/Sdk.java`, drawn on the Activity Flow canvas in Studio. It says which activity
-  starts, which method each card runs, where each outcome leads, how the bot gets home
-  (`.home(Gamebot::goHome)`) and how it makes the game ready, its settings included (`.setup(Gamebot::setup)`):
-  `Collect` loops on itself until there is nothing left, then `Battle`; a win goes
-  back to collecting, a loss rests first.
-- **`Gamebot`** — the wiring. `Bot.runFlow(Sdk.class)` reads the flow and the capture source off `Sdk.java`
-  and walks the flow.
+- **The flows** — `plugins/sdk/Flows.java`, one constant per way of playing, each drawn on the Activity Flow
+  canvas in Studio. `Flows.MAIN` says which activity starts, which method each card runs and where each outcome
+  leads: `Collect` loops on itself until there is nothing left, then `Battle`; a win goes back to collecting, a
+  loss rests first. `Rest` is `.switchable()`: the person running the bot may switch it off for their computer.
+- **The run** — `Sdk.run()` in `plugins/sdk/Sdk.java`: which flow runs when nobody picks one
+  (`Run.of(Flows.MAIN)`), how the bot gets home (`.home(Gamebot::goHome)`) and how it makes the game ready, its
+  settings included (`.setup(Gamebot::setup)`) — one each for the whole bot, whichever flow runs.
+- **`Gamebot`** — the wiring. `Bot.runFlow(Sdk.class)` reads the run and the capture source off `Sdk.java`
+  and walks the flow the run names.
 
 The canvas and the code are joined by a **method reference**: `Collect::body` in `Sdk.java` is the same four
 tokens javac resolves in `Collect.java`, so renaming or deleting an activity's method is a compile error

@@ -39,7 +39,7 @@ or renaming a picture has to move the file, the constant and every use of it tog
 - **The flows** — `plugins/sdk/Flows.java`, one constant per way of playing, each drawn on the Activity Flow
   canvas in Studio. `Flows.MAIN` says which activity starts, which method each card runs and where each outcome
   leads: `Collect` loops on itself until there is nothing left, then `Battle`; a win goes back to collecting, a
-  loss rests first. `Rest` is `.switchable()`: the person running the bot may switch it off for their computer.
+  loss rests first. `Rest` is `.switchable()`: the person running the bot may skip it, through `skip` below.
 - **The run** — `Sdk.run()` in `plugins/sdk/Sdk.java`: how the bot gets home (`.home(Gamebot::goHome)`) and how
   it makes the game ready, its settings included (`.setup(Gamebot::setup)`) — one each for the whole bot,
   whichever flow runs.

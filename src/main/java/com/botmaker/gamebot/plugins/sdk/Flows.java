@@ -12,8 +12,8 @@ import java.util.List;
  * This bot's activity flows: what runs, in what order, and what stops it — one constant per way of playing.
  *
  * <p>Drawn in <i>Project ▸ Activity Flow</i>. An activity's work is a method reference, so renaming or deleting
- * the method is a compile error here rather than a flow that quietly does nothing. Which flow runs when nobody
- * picks one is {@link Sdk#run()}'s.
+ * the method is a compile error here rather than a flow that quietly does nothing. Which one runs is
+ * {@link Sdk#flow}, a parameter the person running the bot picks in the Runner.
  */
 @SdkValue(SdkValue.Id.FLOWS)
 public final class Flows {

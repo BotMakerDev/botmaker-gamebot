@@ -18,7 +18,7 @@
             (`mvn -Ptemplates -Dbotmaker.sdk.version=<its -SNAPSHOT>`); a release moves this value.
             Studio's Project ▸ Upgrade… moves it too, and keeps the property.
         -->
-        <botmaker.sdk.version>1.4.2</botmaker.sdk.version>
+        <botmaker.sdk.version>1.4.4</botmaker.sdk.version>
     </properties>
 
     <!--
